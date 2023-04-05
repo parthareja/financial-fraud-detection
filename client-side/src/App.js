@@ -5,13 +5,12 @@ import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import AuthApi from './utils/AuthApi';
 import DashBoard from './components/DashBoard';
-// import Routes from './routes/Routes';
+import { useState } from 'react';
 
-// import Routes from './routes/Routes';
 function App() {
+  const [auth,setAuth] = useState(false);
   return (
     <div className="App">
-     
         <Routes>
           <Route path="/dashboard" element={<DashBoard/>}/>
           <Route path="/signin" element={<SignIn />} />
