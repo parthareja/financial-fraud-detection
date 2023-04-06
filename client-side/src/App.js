@@ -33,15 +33,12 @@ function App() {
         <Route path="/dashboard" element={<DashBoard />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route
-          path="/testdev"
-          element={<TestDev backendDataDev={ bruh } />}
-        />
+        <Route path="/testdev" element={<TestDev backendDataDev={bruh} />} />
         {/* <Route
           path="/testdev"
           element={
-            <TestDev backendDataDev={{ users: ["chamar", "da Phodda"] }} /> */}
-        } />
+            <TestDev backendDataDev={{ users: ["chamar", "da Phodda"] }} />
+        } /> */}
       </Routes>
     </div>
   );
