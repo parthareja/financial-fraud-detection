@@ -1,3 +1,4 @@
 test.py
 node_modules
 fraud-detection-syn-dataset.csv
+.env
