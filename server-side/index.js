@@ -6,25 +6,24 @@
 // const register = require("./controllers/auth.js");
 import express from "express";
 import mongoose from "mongoose";
-import * as dotenv from "dotenv" 
-import authRoutes from "./routes/auth.js"
-
+import * as dotenv from "dotenv";
+import authRoutes from "./routes/auth.js";
 const app = express();
 app.use(express.json());
-dotenv.config()
-app.use("/auth", authRoutes)
-
+dotenv.config();
+app.use("/auth", authRoutes);
 
 // MONGOOSE SET UP
 // const mongoose = require("mongoose");
 
+const PORT = process.env.PORT || 5000;
 
-const PORT = process.env.PORT || 8081;
-
-mongoose.connect(process.env.MONGO_URL, {
+mongoose
+  .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: false
-}).then(() => {
+    useUnifiedTopology: false,
+  })
+  .then(() => {
     app.listen(PORT, () => console.log(`server port: ${PORT}`));
-}).catch((error) => console.log(`${error}, did not connect`))
-
+  })
+  .catch((error) => console.log(`${error}, did not connect`));
