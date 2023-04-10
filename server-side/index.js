@@ -6,13 +6,17 @@
 // const register = require("./controllers/auth.js");
 import express from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 import * as dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 const app = express();
-app.use(express.json());
 dotenv.config();
+
+app.use(cors({origin:"http://localhost:3000"}))
+app.use(express.json());
 app.use("/auth", authRoutes);
 
+app.get("/api", (req, res) => { res.send({ response: "Hell nah"})})
 // MONGOOSE SET UP
 // const mongoose = require("mongoose");
 
