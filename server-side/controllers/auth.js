@@ -30,7 +30,7 @@ export const register = async (req, res) => {
 
     const maxAge = 10*60
     const token = jwt.sign({ id: savedUser._id }, process.env.JWT_SECRET, {expiresIn: maxAge});
-    res.cookie("jwt", token, {httpOnly: true, maxAge: maxAge*1000})
+    res.cookie("jwt", token, {httpOnly: false, maxAge: maxAge*1000})
     res.status(201).json(savedUser);
   } catch (err) {
     console.log(err)

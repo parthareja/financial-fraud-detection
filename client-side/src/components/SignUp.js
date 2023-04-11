@@ -40,7 +40,7 @@ export default function SignUp() {
       password: data.get('password'),
     };
     console.log(dataJSON);
-    const res = await fetch("http://localhost:8080/auth/register", {method: "POST", body: JSON.stringify(dataJSON),mode: "cors", headers: {"Content-Type":"application/json"}}).then((res)=>console.log("boba", res))
+    const res = await fetch("http://localhost:8080/auth/register", {method: "POST", body: JSON.stringify(dataJSON), headers: {"Content-Type":"application/json"}}).then((res)=>console.log("boba", res))
     // const res = await axios.post("http://localhost:8080/auth/register", dataJSON).then((res)=>console.log("boba", res))
   };
 
