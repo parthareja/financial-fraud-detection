@@ -48,6 +48,7 @@ export default function SignUp() {
   });
 
   const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -81,22 +82,12 @@ export default function SignUp() {
               setPasswordError({ show: true, error: data.errors.email });
             }
           } else if (data._id) {
-            setEmailError(false);
-            setPasswordError(false);
+            setEmailError({ show: false, error: "" });
+            setPasswordError({ show: false, error: "" });
             navigate("/dashboard");
           }
         });
       });
-
-    // console.log(res);
-    // .then((res) => {
-    //   if (res._id) {
-    //     console.log("redirecting");
-    //     navigate("/signin");
-    //   }
-    // });
-    // navigate("/signin");
-    // const rs = await axios.post("http://localhost:8080/auth/register", dataJSON).then((res)=>console.log("boba", res))
   };
 
   return (

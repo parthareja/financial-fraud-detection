@@ -55,16 +55,11 @@ export const register = async (req, res) => {
     const token = jwt.sign({ id: savedUser._id }, process.env.JWT_SECRET, {
       expiresIn: maxAge,
     });
-    res.cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 });
+    res.cookie("jwtSignUp", token, { httpOnly: false, maxAge: maxAge * 1000 });
     res.status(201).json(savedUser);
   } catch (err) {
     const errors = handleErrors(err);
     console.log(errors);
-    // //test
-    // Object.values(err.errors).forEach(error =>{
-    //   console.log(error.properties)})
-    // console.log(err)
-
     res.status(500).json({ errors });
   }
 };
@@ -84,9 +79,11 @@ export const login = async (req, res) => {
       expiresIn: maxAge,
     });
     delete user.password;
-
-    res.status(200).json({ token, user });
+    res.cookie("jwtLogin", token, { httpOnly: false, maxAge: maxAge * 1000 });
+    res.status(200).json(user);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    const errors = handleErrors(err);
+    console.log(errors);
+    res.status(500).json({ errors });
   }
 };
