@@ -11,8 +11,10 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 // import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
@@ -33,9 +35,18 @@ function Copyright(props) {
   );
 }
 
+// var emailError = "Default Email Error";
+// var passwordError = "Default Password Error";
+
 const theme = createTheme();
 
 export default function SignUp() {
+  const [emailError, setEmailError] = useState({ show: false, error: "" });
+  const [passwordError, setPasswordError] = useState({
+    show: false,
+    error: "",
+  });
+
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -59,7 +70,19 @@ export default function SignUp() {
       .then((res) => {
         res.json().then((data) => {
           console.log(data);
-          if (data._id) {
+          if (data.errors) {
+            if (data.errors.email !== "") {
+              console.log(data.errors.email);
+              // emailError = data.errors.email;
+              setEmailError({ show: true, error: data.errors.email });
+            }
+            if (data.errors.password !== "") {
+              passwordError = data.errors.password;
+              setPasswordError({ show: true, error: data.errors.email });
+            }
+          } else if (data._id) {
+            setEmailError(false);
+            setPasswordError(false);
             navigate("/dashboard");
           }
         });
@@ -132,6 +155,17 @@ export default function SignUp() {
                   autoComplete="email"
                 />
               </Grid>
+              {/* <h5 id="email-error">error</h5> */}
+              {emailError.show && (
+                <Grid item xs={12}>
+                  <small
+                    id="emailError"
+                    className="form-text text-muted ml-auto"
+                  >
+                    {emailError.error}
+                  </small>
+                </Grid>
+              )}
               <Grid item xs={12}>
                 <TextField
                   required
@@ -143,6 +177,16 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
+              {passwordError.show && (
+                <Grid item xs={12}>
+                  <small
+                    id="passwordError"
+                    className="form-text text-muted ml-auto"
+                  >
+                    {passwordError.error}
+                  </small>
+                </Grid>
+              )}
               <Grid item xs={12}>
                 <FormControlLabel
                   control={
