@@ -59,7 +59,7 @@ export const register = async (req, res) => {
 
   } catch (err) {
     const errors = handleErrors(err);
-
+    console.log(errors)
     // //test
     // Object.values(err.errors).forEach(error =>{
     //   console.log(error.properties)})
