@@ -49,7 +49,7 @@ export const login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: "Invalid password." });
     const maxAge = 10*60
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {expiresIn: maxAge});
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {expiresIn: maxAge});
     delete user.password;
 
     res.status(200).json({ token, user });
