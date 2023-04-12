@@ -23,12 +23,10 @@ function Copyright(props) {
       align="center"
       {...props}
     >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
+      {"Capstone I — financial-fraud-detection — 2023"}
+      {/* <Link color="inherit" href="https://mui.com/"> */}
+        
+      {/* </Link>{" - "} */}
     </Typography>
   );
 }
@@ -56,6 +54,7 @@ export default function SignIn() {
       method: "POST",
       body: JSON.stringify(dataJSON),
       headers: { "Content-Type": "application/json" },
+      credentials: "include"
     })
       .then((res) => {
         console.log("boba", res);

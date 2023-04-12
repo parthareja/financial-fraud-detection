@@ -1,15 +1,16 @@
 import jwt from "jsonwebtoken";
 
-export const verifyToker = async (req, res, next) => {
+export const verifyToken = async (req, res, next) => {
     try {
         let token = req.header("Authorization");
 
         if (!token) {
-            res.status(403).send("Access Denied")
+            res.status(403).send("Access Denied");
+            res.redirect('/signup');
         }
 
         if (token.startsWith("Bearer ")) {
-            token = token.slice(7, token.length).trimLeft()
+            token = token.slice(7, token.length).trimLeft();
         }
 
         const verified =  jwt.verify(token, process.env.JWT_SECRET);
@@ -17,6 +18,6 @@ export const verifyToker = async (req, res, next) => {
         next();
 
     } catch(err) {
-        res.status(500).json({error: err.message})
+        res.status(500).json({error: err.message});
     }
 }

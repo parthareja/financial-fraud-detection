@@ -9,12 +9,24 @@ import mongoose from "mongoose";
 import cors from "cors";
 import * as dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
+import cookieParser from "cookie-parser";
+import session from "express-session";
 const app = express();
 dotenv.config();
 
-app.use(cors({origin:"http://localhost:3000"}))
+app.use(cors({origin:"http://localhost:3000", credentials: true}))
 app.use(express.json());
 app.use("/auth", authRoutes);
+
+app.use(cookieParser(process.env.JWT_SECRET))
+app.use(
+  session({
+    secret: process.env.JWT_SECRET,
+    resave: true,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 1 day
+  })
+)
 
 app.get("/api", (req, res) => { res.send({ response: "Hell nah"})})
 // MONGOOSE SET UP

@@ -25,12 +25,10 @@ function Copyright(props) {
       align="center"
       {...props}
     >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
+      {"Capstone I — financial-fraud-detection — 2023"}
+      {/* <Link color="inherit" href="https://mui.com/"> */}
+        
+      {/* </Link>{" - "} */}
     </Typography>
   );
 }
@@ -179,12 +177,12 @@ export default function SignUp() {
                 </Grid>
               )}
               <Grid item xs={12}>
-                <FormControlLabel
+                {/* <FormControlLabel
                   control={
                     <Checkbox value="allowExtraEmails" color="primary" />
                   }
                   label="I want to receive inspiration, marketing promotions and updates via email."
-                />
+                /> */}
               </Grid>
             </Grid>
             <Button
