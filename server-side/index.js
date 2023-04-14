@@ -11,6 +11,7 @@ import * as dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 import cookieParser from "cookie-parser";
 import session from "express-session";
+import { verifyToken } from "./middleware/auth.js"
 const app = express();
 dotenv.config();
 
@@ -28,7 +29,7 @@ app.use(
   })
 )
 
-app.get("/api", (req, res) => { res.send({ response: "Hell nah"})})
+app.get("/api", (req, res) => {console.log('ap/i ok')})
 // MONGOOSE SET UP
 // const mongoose = require("mongoose");
 

@@ -7,13 +7,17 @@ import AuthApi from "./utils/AuthApi";
 import DashBoard from "./components/DashBoard";
 import TestDev from "./components/TestDev";
 import React, { useDebugValue, useEffect, useState } from "react";
+import { UserProvider } from "./contexts/UserContext";
+import { useUser } from "./contexts/UserContext";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
+  // const {user} = useUser();
   const [auth, setAuth] = useState(false);
   const [backendData, setBackendData] = useState([{}]);
 
   useEffect(() => {
+
     const fetchData = async () => {
       await fetch("/api")
         .then((response) => response.json())
@@ -23,25 +27,28 @@ function App() {
   }, []);
   const bruh = JSON.stringify(backendData);
   console.log("App bruh backendData");
+  // console.log(user);
   console.log(bruh);
 
   // setBackendData({ users: ["chamar"] });
 
   return (
     <div className="App">
-      <Routes>
-        {/* <Route path="/" element={<App />} /> */}
-        <Route path="/" element={<SignUp />} />
-        <Route path="/dashboard" element={<DashBoard />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/testdev" element={<TestDev backendDataDev={bruh} />} />
-        {/* <Route
-          path="/testdev"
-          element={
-            <TestDev backendDataDev={{ users: ["chamar", "da Phodda"] }} />
-        } /> */}
-      </Routes>
+      <UserProvider>
+        <Routes>
+          {/* <Route path="/" element={<App />} /> */}
+          <Route path="/" element={<SignUp />} />
+          <Route path="/dashboard" element={<DashBoard />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/testdev" element={<TestDev backendDataDev={bruh} />} />
+          {/* <Route
+            path="/testdev"
+            element={
+              <TestDev backendDataDev={{ users: ["chamar", "da Phodda"] }} />
+          } /> */}
+        </Routes>
+      </UserProvider>
     </div>
   );
 }

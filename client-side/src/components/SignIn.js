@@ -14,6 +14,10 @@ import Container from "@mui/material/Container";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useEffect } from "react";
+import { useUser, setUser } from "../contexts/UserContext";
+
+import Cookies from "js-cookie";
 
 
 function Copyright(props) {
@@ -26,7 +30,7 @@ function Copyright(props) {
     >
       {"Capstone I — financial-fraud-detection — 2023"}
       {/* <Link color="inherit" href="https://mui.com/"> */}
-        
+
       {/* </Link>{" - "} */}
     </Typography>
   );
@@ -40,8 +44,18 @@ export default function SignIn() {
     show: false,
     error: "",
   });
+  const { user, setUser } = useUser();
+  console.log("before useEffect", user)
 
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    console.log("Sign in useEffect called");
+    console.log(user);
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -55,15 +69,17 @@ export default function SignIn() {
       method: "POST",
       body: JSON.stringify(dataJSON),
       headers: { "Content-Type": "application/json" },
-      credentials: "include"
+      credentials: "include",
     })
-      .then((res) => {
-        console.log("boba", res);
-        return res;
-      })
+      // .then((res) => {
+      //   console.log("boba", res);
+      //   return res;
+      // })
       .then((res) => {
         res.json().then((data) => {
-          // console.log(data.firstName);
+          // console.log("data for setUser", data.firstName);
+          // console.log("cookedar", document.cookie)
+          console.log("kukky", Cookies.get("jwtLogin"));
           if (data.msg) {
             if (data.msg !== "") {
               console.log(data.msg);
@@ -72,7 +88,7 @@ export default function SignIn() {
                 setEmailError({ show: true, error: "User does not exist." });
                 setPasswordError({ show: false, error: "" });
               }
-              if (data.msg == "Invalid password.") {
+              if (data.msg === "Invalid password.") {
                 setPasswordError({ show: true, error: "Invalid password." });
                 setEmailError({ show: false, error: "" });
               }
@@ -80,6 +96,8 @@ export default function SignIn() {
           } else if (data._id) {
             setEmailError({ show: false, error: "" });
             setPasswordError({ show: false, error: "" });
+            setUser(data);
+            console.log("YEH", data);
             navigate("/dashboard");
           }
         });

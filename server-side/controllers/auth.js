@@ -89,6 +89,10 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  res.cookie('jwtLogin', '', {maxAge: 1});
+  res.cookie('jwtLogin', '', {maxAge: 1});          //////////////////////////////////// BAD WAY TO DO
   res.send("logged out");
 }
+
+
+// export const authTemp = async (req, res) => {
+//   console.log("ok")}

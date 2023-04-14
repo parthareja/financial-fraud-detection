@@ -56,22 +56,22 @@ export default function SignUp() {
       email: data.get("email"),
       password: data.get("password"),
     };
-    console.log(dataJSON);
+    // console.log(dataJSON);
     const res = await fetch("http://localhost:8080/auth/register", {
       method: "POST",
       body: JSON.stringify(dataJSON),
       headers: { "Content-Type": "application/json" },
     })
-      .then((res) => {
-        console.log("boba", res);
-        return res;
-      })
+      // .then((res) => {
+      //   // console.log("boba", res);
+      //   return res;
+      // })
       .then((res) => {
         res.json().then((data) => {
-          console.log(data);
+          // console.log(data);
           if (data.errors) {
             if (data.errors.email !== "") {
-              console.log(data.errors.email);
+              // console.log(data.errors.email);
               // emailError = data.errors.email;
               setEmailError({ show: true, error: data.errors.email });
             }
@@ -82,6 +82,7 @@ export default function SignUp() {
           } else if (data._id) {
             setEmailError({ show: false, error: "" });
             setPasswordError({ show: false, error: "" });
+            console.log("HAWWWWWWWWW", data)
             navigate("/dashboard");
           }
         });
