@@ -15,6 +15,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+
 function Copyright(props) {
   return (
     <Typography
@@ -62,7 +63,7 @@ export default function SignIn() {
       })
       .then((res) => {
         res.json().then((data) => {
-          console.log(data);
+          // console.log(data.firstName);
           if (data.msg) {
             if (data.msg !== "") {
               console.log(data.msg);

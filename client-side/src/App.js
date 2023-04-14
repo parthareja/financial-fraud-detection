@@ -7,6 +7,7 @@ import AuthApi from "./utils/AuthApi";
 import DashBoard from "./components/DashBoard";
 import TestDev from "./components/TestDev";
 import React, { useDebugValue, useEffect, useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const [auth, setAuth] = useState(false);
