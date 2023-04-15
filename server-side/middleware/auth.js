@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 
 export const verifyToken = async (req, res, next) => {
     // const token = req.cookies.jwt;
+    ///////////
     let cookies = {};
     
 
@@ -12,13 +13,14 @@ export const verifyToken = async (req, res, next) => {
         const [key, value] = cookie.trim().split('=');
         cookies[key] = value;
     });
-
     res.json(cookies);
+    //////////
     // console.log("what how", Cookies.get('jwtLogin'))
 
     next();
 
 
+    
 
 
     // if (token) {
