@@ -5,10 +5,11 @@ import { verifyToken } from "./../middleware/auth.js"
 const router = express.Router();
 // ROUTES
 router.post("/register", register);
-router.post("/login", login);
-router.get("/logout", logout);
+router.post("/login", verifyToken, login);
+// router.post("/login", login);
+router.get("/logout", verifyToken, logout);
 router.get("/test", verifyToken)
-router.get("/jwtGetUser",jwtGetUser)
+router.get("/jwtGetUser", jwtGetUser)
 // router.get("/authTemp", verifyToken, authTemp)
 
 
