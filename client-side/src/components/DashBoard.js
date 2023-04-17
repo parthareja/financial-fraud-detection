@@ -33,7 +33,7 @@ function DashBoard() {
       <div>
         <h1 className="text-3xl font-bold underline">Dashboard</h1>
       </div>
-      {/* <h2>Welcome {user.firstName + " " + user.lastName}</h2> */}
+      <h2>Welcome {user.firstName + " " + user.lastName}</h2>
       <button onClick={logout}>Logout</button>
     </div>
   );

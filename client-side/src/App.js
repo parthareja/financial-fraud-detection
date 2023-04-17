@@ -19,7 +19,6 @@ function App() {
   // const {user} = useUser();
   axios.defaults.withCredentials = true;
   const [user, setUser] = useState(false);
-  const value = useMemo(() => ({ user, setUser }), [user]);
   const [auth, setAuth] = useState(false);
   const [backendData, setBackendData] = useState([{}]);
 
@@ -72,7 +71,7 @@ function App() {
 
   return (
     <div className="App">
-      <TestContext.Provider value={value}>
+      <TestContext.Provider value={{ user, setUser }}>
         {/* <UserProvider> */}
         <AuthProvider>
           <Routes>

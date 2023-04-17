@@ -57,7 +57,7 @@ export const register = async (req, res) => {
     const token = jwt.sign({ id: savedUser._id }, process.env.JWT_SECRET, {
       expiresIn: maxAge,
     });
-    res.cookie("jwtSignUp", token, { httpOnly: false, maxAge: maxAge * 1000 });
+    res.cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 });
     res.status(201).json(savedUser);
   } catch (err) {
     const errors = handleErrors(err);
@@ -82,7 +82,7 @@ export const login = async (req, res) => {
       expiresIn: maxAge,
     });
     delete user.password;
-    res.cookie("jwtLogin", token, { httpOnly: false, maxAge: maxAge * 1000 });
+    res.cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 });
     res.status(200).json(user);
   } catch (err) {
     const errors = handleErrors(err);
@@ -92,7 +92,7 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  res.cookie("jwtLogin", "", { maxAge: 1 }); //////////////////////////////////// BAD WAY TO DO
+  res.cookie("jwt", "", { maxAge: 1 }); //////////////////////////////////// BAD WAY TO DO
   res.send("logged out");
 };
 
@@ -126,8 +126,8 @@ export const jwtGetUser = async (req, res, next) => {
     });
     // res.json(cookies);
 
-    const userjwt = cookies["jwtLogin"];
-    console.log("JWT: ", userjwt);
+    const userjwt = cookies["jwt"];
+    // console.log("JWT: ", userjwt);
 
     const payload = getPayloadFromToken(userjwt);
 
