@@ -62,6 +62,7 @@ export const register = async (req, res) => {
   } catch (err) {
     const errors = handleErrors(err);
     console.log(errors);
+
     res.status(500).json({ errors });
   }
 };
@@ -91,48 +92,53 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  res.cookie('jwtLogin', '', { maxAge: 1 });          //////////////////////////////////// BAD WAY TO DO
+  res.cookie("jwtLogin", "", { maxAge: 1 }); //////////////////////////////////// BAD WAY TO DO
   res.send("logged out");
-}
-
+};
 
 // export const authTemp = async (req, res) => {
 //   console.log("ok")}
-
 
 // JWT PAYLOAD DECRYPT
 
 function getPayloadFromToken(token) {
   const decodedToken = jwt.decode(token, {
-    complete: true
+    complete: true,
   });
   if (!decodedToken) {
-    throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, `provided token does not decode as JWT`);
+    throw new Parse.Error(
+      Parse.Error.OBJECT_NOT_FOUND,
+      `provided token does not decode as JWT`
+    );
   }
   return decodedToken.payload;
 }
 
 //JWT TO USER_INFO
 export const jwtGetUser = async (req, res, next) => {
-  console.log("fetching user data from jwt")
-  let cookies = {};
-  const cookiesArray = req.headers.cookie.split(';');
-  cookiesArray.forEach((cookie) => {
-    const [key, value] = cookie.trim().split('=');
-    cookies[key] = value;
-  });
-  res.json(cookies)
+  try {
+    // console.log("fetching user data from jwt");
+    let cookies = {};
+    const cookiesArray = req.headers.cookie.split(";");
+    cookiesArray.forEach((cookie) => {
+      const [key, value] = cookie.trim().split("=");
+      cookies[key] = value;
+    });
+    // res.json(cookies);
 
-  const userjwt = cookies['jwtLogin']
-  console.log("JWT: ", userjwt)
+    const userjwt = cookies["jwtLogin"];
+    console.log("JWT: ", userjwt);
 
-  const payload = getPayloadFromToken(userjwt)
-  
+    const payload = getPayloadFromToken(userjwt);
 
-  const objectId = (payload["_id"])
-  console.log('User id: ', objectId)
-  // const userJson = await User.find({email:"test@test.com"});
-  const userJson = await User.findById({_id: objectId});
-  console.log(userJson);      
-  next(); 
-}
+    const objectId = payload["_id"];
+    // console.log("User id: ", objectId);
+    // const userJson = await User.find({email:"test@test.com"});
+    const userJson = await User.findById({ _id: objectId });
+    // console.log("User by userId", userJson);
+    res.json(userJson);
+    next();
+  } catch (err) {
+    res.send(false);
+  }
+};

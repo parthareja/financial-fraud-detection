@@ -16,6 +16,10 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 // import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+// import { useUser } from "../contexts/UserContext";
+import { useContext } from "react";
+import { TestContext } from "../contexts/TestContext";
 
 function Copyright(props) {
   return (
@@ -27,7 +31,7 @@ function Copyright(props) {
     >
       {"Capstone I — financial-fraud-detection — 2023"}
       {/* <Link color="inherit" href="https://mui.com/"> */}
-        
+
       {/* </Link>{" - "} */}
     </Typography>
   );
@@ -39,6 +43,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
+  const { user, setUser } = useContext(TestContext);
   const [emailError, setEmailError] = useState({ show: false, error: "" });
   const [passwordError, setPasswordError] = useState({
     show: false,
@@ -46,6 +51,14 @@ export default function SignUp() {
   });
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("SignUp useEffect new context called");
+    console.log(user);
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -82,7 +95,7 @@ export default function SignUp() {
           } else if (data._id) {
             setEmailError({ show: false, error: "" });
             setPasswordError({ show: false, error: "" });
-            console.log("HAWWWWWWWWW", data)
+            console.log("HAWWWWWWWWW", data);
             navigate("/dashboard");
           }
         });

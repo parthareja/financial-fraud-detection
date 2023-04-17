@@ -1,29 +1,67 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { Route, Routes, Link } from "react-router-dom";
+import React, { useDebugValue, useEffect, useState, useMemo } from "react";
+import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import AuthApi from "./utils/AuthApi";
 import DashBoard from "./components/DashBoard";
 import TestDev from "./components/TestDev";
-import React, { useDebugValue, useEffect, useState } from "react";
+
 import { UserProvider } from "./contexts/UserContext";
-import { useUser } from "./contexts/UserContext";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { AuthProvider } from "./contexts/AuthContext";
+import { TestContext } from "./contexts/TestContext";
 
 function App() {
   // const {user} = useUser();
+  axios.defaults.withCredentials = true;
+  const [user, setUser] = useState(false);
+  const value = useMemo(() => ({ user, setUser }), [user]);
   const [auth, setAuth] = useState(false);
   const [backendData, setBackendData] = useState([{}]);
 
-  useEffect(() => {
+  // const value = "My Context Value";
 
+  // const { user, setUser } = useUser;
+
+  // console.log("Outside useEffect", user);
+  // setUser(undefined);
+  useEffect(() => {
+    // console.log("Inside useEffect", user);
+    // setUser(undefined);
     const fetchData = async () => {
       await fetch("/api")
         .then((response) => response.json())
         .then((data) => setBackendData(data));
     };
-    fetchData();
+
+    // fetchData();
+
+    // const defaultLogin = async (user, setUser) => {
+    //   console.log("Inside defaultLogin", user);
+    //   // setUser(undefined);
+
+    //   const temp = await axios("http://localhost:8080/auth/jwtGetUser", {
+    //     withCredentials: true,
+    //   });
+
+    //   var authorized = temp.data;
+    //   // .then((res) => {
+    //   //   console.log("axios res", res);
+    //   // });
+    //   // console.log("axios res", temp.data);
+    //   // console.log(user);
+    //   // console.log(authorized.body);
+    //   if (authorized === false) {
+    //     setUser(undefined);
+    //   } else {
+    //     setUser(authorized);
+    //   }
+    // };
+    // defaultLogin(user, setUser);
   }, []);
   const bruh = JSON.stringify(backendData);
   console.log("App bruh backendData");
@@ -34,21 +72,28 @@ function App() {
 
   return (
     <div className="App">
-      <UserProvider>
-        <Routes>
-          {/* <Route path="/" element={<App />} /> */}
-          <Route path="/" element={<SignUp />} />
-          <Route path="/dashboard" element={<DashBoard />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/testdev" element={<TestDev backendDataDev={bruh} />} />
-          {/* <Route
+      <TestContext.Provider value={value}>
+        {/* <UserProvider> */}
+        <AuthProvider>
+          <Routes>
+            {/* <Route path="/" element={<App />} /> */}
+            <Route path="/" element={<SignUp />} />
+            <Route path="/dashboard" element={<DashBoard />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route
+              path="/testdev"
+              element={<TestDev backendDataDev={bruh} />}
+            />
+            {/* <Route
             path="/testdev"
             element={
               <TestDev backendDataDev={{ users: ["chamar", "da Phodda"] }} />
           } /> */}
-        </Routes>
-      </UserProvider>
+          </Routes>
+        </AuthProvider>
+        {/* </UserProvider> */}
+      </TestContext.Provider>
     </div>
   );
 }

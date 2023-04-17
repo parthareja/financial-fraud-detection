@@ -11,14 +11,16 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useEffect } from "react";
-import { useUser, setUser } from "../contexts/UserContext";
+// import { useUser } from "../contexts/UserContext";
+import { useContext } from "react";
+import { TestContext } from "../contexts/TestContext";
 
 import Cookies from "js-cookie";
-
 
 function Copyright(props) {
   return (
@@ -39,23 +41,27 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignIn() {
+  const { user, setUser } = useContext(TestContext);
+
+  // const { setUser, user } = useUser();
   const [emailError, setEmailError] = useState({ show: false, error: "" });
   const [passwordError, setPasswordError] = useState({
     show: false,
     error: "",
   });
-  const { user, setUser } = useUser();
-  console.log("before useEffect", user)
+  // console.log("before useEffect", user);
 
   const navigate = useNavigate();
-  
+
   useEffect(() => {
-    console.log("Sign in useEffect called");
-    console.log(user);
+    // console.log("Sign in useEffect called");
+    // console.log(user);
+    console.log("VALUE OF NEW CONTEXT", user);
     if (user) {
+      console.log("signin user value", user);
       navigate("/dashboard");
     }
-  }, []);
+  }, [user]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -64,7 +70,7 @@ export default function SignIn() {
       email: data.get("email"),
       password: data.get("password"),
     };
-    console.log(dataJSON);
+    // console.log(dataJSON);
     const res = await fetch("http://localhost:8080/auth/login", {
       method: "POST",
       body: JSON.stringify(dataJSON),
@@ -97,7 +103,7 @@ export default function SignIn() {
             setEmailError({ show: false, error: "" });
             setPasswordError({ show: false, error: "" });
             setUser(data);
-            console.log("YEH", data);
+            console.log("YEH", user);
             navigate("/dashboard");
           }
         });
