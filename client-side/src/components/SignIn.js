@@ -56,7 +56,7 @@ export default function SignIn() {
   useEffect(() => {
     // console.log("Sign in useEffect called");
     // console.log(user);
-    // console.log("VALUE OF NEW CONTEXT", user);
+    console.log("VALUE OF NEW CONTEXT", user);
     if (user) {
       console.log("signin user value", user);
       navigate("/dashboard");
@@ -103,7 +103,7 @@ export default function SignIn() {
             setEmailError({ show: false, error: "" });
             setPasswordError({ show: false, error: "" });
             setUser(data);
-            // console.log("YEH", user);
+            console.log("YEH", user);
             navigate("/dashboard");
           }
         });
