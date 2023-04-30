@@ -4,14 +4,14 @@ import { useUser } from "./UserContext";
 // import { useContext } from "react";
 import { TestContext } from "../contexts/TestContext";
 
-const AuthContext = React.createContext();
+const AuthContext = React.createContext("Default Values");
 
 export const useAuth = () => {
   return useContext(AuthContext);
 };
 
 export const AuthProvider = ({ children }) => {
-  const { user, setUser } = useContext(TestContext);
+  const { user, setUser } = useAuth;
 
   useEffect(() => {
     defaultLogin();
@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
       //     setUser(data.user);
       //   }
 
-      console.log("Inside defaultLogin", user);
+      // console.log("Inside defaultLogin", user);
       // setUser(undefined);
 
       const temp = await axios.get("http://localhost:8080/auth/jwtGetUser", {
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       var authorized = temp.data;
-      console.log(authorized);
+      console.log("server_authorized", authorized);
 
       // setUser("this doesn't work");
       // console.log(user);

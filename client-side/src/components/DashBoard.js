@@ -10,8 +10,8 @@ function DashBoard() {
   const { setUser, user } = useContext(TestContext);
   const navigate = useNavigate();
   useEffect(() => {
-    console.log("dashboard useEffect new context");
-    console.log(user);
+    // console.log("dashboard useEffect new context");
+    // console.log(user);
     if (!user) {
       navigate("/signin");
     }
