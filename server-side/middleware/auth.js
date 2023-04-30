@@ -19,6 +19,7 @@ export const verifyToken = async (req, res, next) => {
     jwt.verify(userjwt, process.env.JWT_SECRET, (err, decodedToken) => {
       if (err) {
         console.log("badsecret:", err.message);
+        res.send(false);
         /// what to do page will keep on loading probably we need to send to signin
       } else {
         console.log("goodauth:", decodedToken);
@@ -27,6 +28,7 @@ export const verifyToken = async (req, res, next) => {
     });
   } catch (err) {
     console.log("myb no jwt:", err.message);
+    res.send(false);
     // send to signin?
   }
 };

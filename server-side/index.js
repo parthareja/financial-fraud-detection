@@ -8,10 +8,13 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import * as dotenv from "dotenv";
-import authRoutes from "./routes/auth.js";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import { verifyToken } from "./middleware/auth.js";
+
+import authRoutes from "./routes/auth.js";
+import dashboardRoutes from "./routes/dashboard.js";
+
 const app = express();
 dotenv.config();
 
@@ -23,6 +26,7 @@ app.use(
 );
 app.use(express.json());
 app.use("/auth", authRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(
