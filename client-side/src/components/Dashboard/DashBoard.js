@@ -6,6 +6,7 @@ import { useEffect } from "react";
 // import { useContext } from "react";
 import { TestContext } from "../../contexts/TestContext";
 import SideBar from "./SideBar";
+import ContentDashboard from "./ContentDashboard";
 
 function DashBoard() {
   const { setUser, user } = useContext(TestContext);
@@ -57,12 +58,14 @@ function DashBoard() {
       {/* <div className="bg-sky-200">
         sidebar
       </div> */}
-      <SideBar/>
-      <div className="p-4">
+      
+      <SideBar user = {user}/>
+      {/* <div className="p-4">
         <div className="bg-slate-500">
           main
         </div>
-      </div>
+      </div> */}
+      <ContentDashboard/>
     </div>
   );
 }

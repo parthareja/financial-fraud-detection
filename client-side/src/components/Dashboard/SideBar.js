@@ -8,7 +8,7 @@ function SideBar(user) {
                 <span className='text-neutral-100 text-lg'>Fraud Detection</span>
             </div>
             <div className='text-left'>
-                bruh why 
+                {user.firstName}
             </div>
         
             {/* <div class="flex-1">top part</div> */}
