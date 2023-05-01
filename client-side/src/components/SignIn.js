@@ -56,7 +56,7 @@ export default function SignIn() {
   useEffect(() => {
     // console.log("Sign in useEffect called");
     // console.log(user);
-    console.log("VALUE OF NEW CONTEXT", user);
+    // console.log("VALUE OF NEW CONTEXT", user);
     if (user) {
       console.log("signin user value", user);
       navigate("/dashboard");
