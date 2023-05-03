@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 
 const queryDataSchema = new mongoose.Schema({
+    alias: {
+      type: String,
+      required: [true, "Please enter an alias for your query"]
+    },
     step: {
         type: Int16Array,
         required: [true, "Please enter time step"],
