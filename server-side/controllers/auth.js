@@ -53,7 +53,7 @@ export const register = async (req, res) => {
 
     const savedUser = await newUser.save();
 
-    const maxAge = 10 * 60;
+    const maxAge = 1000 * 60;
     const token = jwt.sign({ id: savedUser._id }, process.env.JWT_SECRET, {
       expiresIn: maxAge,
     });

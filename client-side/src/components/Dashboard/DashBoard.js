@@ -18,6 +18,7 @@ function DashBoard() {
       navigate("/signin");
     }
   }, [user]);
+
   async function logout() {
     const res = await fetch("http://localhost:8080/auth/logout", {
       credentials: "include",
@@ -58,14 +59,14 @@ function DashBoard() {
       {/* <div className="bg-sky-200">
         sidebar
       </div> */}
-      
-      <SideBar user = {user}/>
+
+      <SideBar handleLogout={logout} WelcomeUser = {user}/>
       {/* <div className="p-4">
         <div className="bg-slate-500">
           main
         </div>
       </div> */}
-      <ContentDashboard/>
+      <ContentDashboard />
     </div>
   );
 }
