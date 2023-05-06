@@ -57,7 +57,7 @@ function ContentDashboard() {
                             <Form.Label>Old Origin Balance</Form.Label>
                             <InputGroup className="mb-3">
                                 <InputGroup.Text>₹</InputGroup.Text>
-                                <Form.Control placeholder="Enter amount " onChange={(e) => { oldBalanceOrig = e.target.value }} />
+                                <Form.Control placeholder="Enter amount " autoComplete='off' onChange={(e) => { oldBalanceOrig = e.target.value }} />
                             </InputGroup>
                         </Form.Group>
 
@@ -65,7 +65,7 @@ function ContentDashboard() {
                             <Form.Label>New Origin Balance</Form.Label>
                             <InputGroup className="mb-3">
                                 <InputGroup.Text>₹</InputGroup.Text>
-                                <Form.Control placeholder="Enter amount " onChange={(e) => { newBalanceOrig = e.target.value }} />
+                                <Form.Control placeholder="Enter amount " autoComplete='off' onChange={(e) => { newBalanceOrig = e.target.value }} />
                             </InputGroup>
                         </Form.Group>
                     </Row>
@@ -74,7 +74,7 @@ function ContentDashboard() {
                             <Form.Label>Old Destination Balance</Form.Label>
                             <InputGroup className="mb-3">
                                 <InputGroup.Text>₹</InputGroup.Text>
-                                <Form.Control placeholder="Enter amount " onChange={(e) => { oldBalanceDest = e.target.value }} />
+                                <Form.Control placeholder="Enter amount " autoComplete='off' onChange={(e) => { oldBalanceDest = e.target.value }} />
                             </InputGroup>
                         </Form.Group>
 
@@ -82,7 +82,7 @@ function ContentDashboard() {
                             <Form.Label>New Destination Balance</Form.Label>
                             <InputGroup className="mb-3">
                                 <InputGroup.Text>₹</InputGroup.Text>
-                                <Form.Control placeholder="Enter amount " onChange={(e) => { newBalanceDest = e.target.value }} />
+                                <Form.Control placeholder="Enter amount " autoComplete='off' onChange={(e) => { newBalanceDest = e.target.value }} />
                             </InputGroup>
                         </Form.Group>
                     </Row>
@@ -91,7 +91,7 @@ function ContentDashboard() {
                             <Form.Label>Enter Transaction amount</Form.Label>
                             <InputGroup className="mb-3">
                                 <InputGroup.Text>₹</InputGroup.Text>
-                                <Form.Control placeholder="Enter amount " onChange={(e) => { transactionAmount = e.target.value }} />
+                                <Form.Control placeholder="Enter amount " autoComplete='off' onChange={(e) => { transactionAmount = e.target.value }} />
                             </InputGroup>
                         </Form.Group>
                     </Row>
@@ -141,7 +141,7 @@ function ContentDashboard() {
 
                     <Form.Group className="mb-3" controlId="formTransactionAlias">
                         <Form.Label>Enter Alias</Form.Label>
-                        <Form.Control placeholder="Enter an alias for this query (ex: JHN-09-02-03)" onChange={(e) => { transactionAlias = e.target.value }} />
+                        <Form.Control placeholder="Enter an alias for this query (ex: JHN-09-02-03)" autoComplete='off' onChange={(e) => { transactionAlias = e.target.value }} />
                     </Form.Group>
                     {/* <div className='flex justify-center container bg-orange-200'>
                         <Row className="mb-3 flex flex-col">
