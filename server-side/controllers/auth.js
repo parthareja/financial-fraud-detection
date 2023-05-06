@@ -4,6 +4,7 @@ import User from "../models/User.js";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import Cookies from "js-cookie";
+import QueryData from "../models/QueryData.js";
 // import * as dotenv from "dotenv";
 
 // const bcrypt = require("bcrypt");
@@ -142,3 +143,16 @@ export const jwtGetUser = async (req, res, next) => {
     res.send(false);
   }
 };
+
+export const saveQuery = async(req,res)=>{
+  try{
+    const query = new QueryData(req.body)
+    await query.save()
+    res.set("Access-Control-Allow-Origin", "*")
+    res.send("Qery data stored successfully")
+  }
+  catch(err){
+    console.log(err.message)
+    res.send({msg:err})
+  }
+}

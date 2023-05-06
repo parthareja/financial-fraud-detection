@@ -1,4 +1,4 @@
-import React from 'react'
+import {React, useContext} from 'react'
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -7,10 +7,12 @@ import Row from 'react-bootstrap/Row';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { BsPassFill } from 'react-icons/bs';
 import { useState } from 'react';
+import { TestContext } from '../../contexts/TestContext';
 
 
 
 function ContentDashboard() {
+
     var oldBalanceOrig = 0
     var newBalanceOrig = 0
     var oldBalanceDest = 0
@@ -18,32 +20,40 @@ function ContentDashboard() {
     var transactionAmount = 0
     const [typeCashOut, setTypeCashOut] = useState(1)
     const [typeTransfer, setTypeTransfer] = useState(0)
-    var TransactionTime = 0
+    var TransactionTime = 1
     var transactionAlias = ""
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        const datajson = {
-            amount: transactionAmount,
-            oldbalanceOrg: oldBalanceOrig,
-            newbalanceOrg: newBalanceOrig,
-            oldbalanceDest: oldBalanceDest,
-            newbalanceDest: newBalanceDest,
-            type_CASH_OUT: typeCashOut,
-            type_TRANSFER: typeTransfer,
-            time: TransactionTime,
-            alias: transactionAlias
-        }
-        
-        console.log(datajson)
-        const data = new FormData(e.currentTarget);
-        clearForm()
-    }
+    const {user,setUser} = useContext(TestContext)
 
     const clearForm = () => {
         var formData = document.getElementById("mainForm")
         formData.reset()
     }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        const datajson = {
+            user_id : user._id,
+            amount: transactionAmount,
+            oldbalanceOrg: oldBalanceOrig,
+            newbalanceOrg: newBalanceOrig,
+            origBalance_inacc : (oldBalanceOrig-transactionAmount-newBalanceOrig),
+            oldbalanceDest: oldBalanceDest,
+            newbalanceDest: newBalanceDest,
+            destBalance_inacc: ((oldBalanceDest+transactionAmount)-newBalanceDest),
+            type_CASH_OUT: typeCashOut,
+            type_TRANSFER: typeTransfer,
+            step: TransactionTime,
+            alias: transactionAlias
+        };
+        console.log(datajson)
+
+        const data = new FormData(e.currentTarget);
+
+
+        clearForm()
+    }
+
 
     // (e) =>{(e)=>{if(e.currentTarget.value= 'transfer'){setTypeCashOut(0);setTypeTransfer(1)}}}
     const handleTransactionType = (e) => { if (e.currentTarget.value = 'transfer') { setTypeCashOut(0); setTypeTransfer(1) } else { setTypeCashOut(1); setTypeTransfer(0) } }
@@ -57,7 +67,7 @@ function ContentDashboard() {
                             <Form.Label>Old Origin Balance</Form.Label>
                             <InputGroup className="mb-3">
                                 <InputGroup.Text>₹</InputGroup.Text>
-                                <Form.Control placeholder="Enter amount " autoComplete='off' onChange={(e) => { oldBalanceOrig = e.target.value }} />
+                                <Form.Control placeholder="Enter amount " autoComplete='off' onChange={(e) => { oldBalanceOrig = parseInt(e.target.value) }} />
                             </InputGroup>
                         </Form.Group>
 
@@ -65,7 +75,7 @@ function ContentDashboard() {
                             <Form.Label>New Origin Balance</Form.Label>
                             <InputGroup className="mb-3">
                                 <InputGroup.Text>₹</InputGroup.Text>
-                                <Form.Control placeholder="Enter amount " autoComplete='off' onChange={(e) => { newBalanceOrig = e.target.value }} />
+                                <Form.Control placeholder="Enter amount " autoComplete='off' onChange={(e) => { newBalanceOrig = parseInt(e.target.value) }} />
                             </InputGroup>
                         </Form.Group>
                     </Row>
@@ -74,7 +84,7 @@ function ContentDashboard() {
                             <Form.Label>Old Destination Balance</Form.Label>
                             <InputGroup className="mb-3">
                                 <InputGroup.Text>₹</InputGroup.Text>
-                                <Form.Control placeholder="Enter amount " autoComplete='off' onChange={(e) => { oldBalanceDest = e.target.value }} />
+                                <Form.Control placeholder="Enter amount " autoComplete='off' onChange={(e) => { oldBalanceDest = parseInt(e.target.value) }} />
                             </InputGroup>
                         </Form.Group>
 
@@ -82,7 +92,7 @@ function ContentDashboard() {
                             <Form.Label>New Destination Balance</Form.Label>
                             <InputGroup className="mb-3">
                                 <InputGroup.Text>₹</InputGroup.Text>
-                                <Form.Control placeholder="Enter amount " autoComplete='off' onChange={(e) => { newBalanceDest = e.target.value }} />
+                                <Form.Control placeholder="Enter amount " autoComplete='off' onChange={(e) => { newBalanceDest = parseInt(e.target.value) }} />
                             </InputGroup>
                         </Form.Group>
                     </Row>
@@ -91,7 +101,7 @@ function ContentDashboard() {
                             <Form.Label>Enter Transaction amount</Form.Label>
                             <InputGroup className="mb-3">
                                 <InputGroup.Text>₹</InputGroup.Text>
-                                <Form.Control placeholder="Enter amount " autoComplete='off' onChange={(e) => { transactionAmount = e.target.value }} />
+                                <Form.Control placeholder="Enter amount " autoComplete='off' onChange={(e) => { transactionAmount = parseInt(e.target.value) }} />
                             </InputGroup>
                         </Form.Group>
                     </Row>
