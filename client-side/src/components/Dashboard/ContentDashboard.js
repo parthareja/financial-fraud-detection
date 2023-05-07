@@ -47,10 +47,14 @@ function ContentDashboard() {
             alias: transactionAlias
         };
         console.log(datajson)
-
-        const data = new FormData(e.currentTarget);
-
-
+        await fetch("http://localhost:8080/auth/saveQuery",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body: JSON.stringify(datajson)})
+            .then((res)=>res.text())
+            .then((data)=>console.log(data))
+            .catch((err) => console.log(err.message));
+            
         clearForm()
     }
 
