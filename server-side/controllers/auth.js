@@ -156,3 +156,15 @@ export const saveQuery = async(req,res)=>{
     res.send({msg:err})
   }
 }
+
+export const userTransactions = async(req, res)=>{
+  try{
+    const {user_id} = req.params
+    const data = await QueryData.find({user_id :user_id});
+    res.set("Access-Control-Allow-Origin", "*")
+    res.json(data);
+  }
+  catch(err){
+    res.send({'msg':err})
+  }
+}

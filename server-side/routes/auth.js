@@ -1,5 +1,5 @@
 import express from "express";
-import { register, login, logout, jwtGetUser, saveQuery } from "./../controllers/auth.js";
+import { register, login, logout, jwtGetUser, saveQuery, userTransactions } from "./../controllers/auth.js";
 import { verifyToken } from "./../middleware/auth.js"
 
 const router = express.Router();
@@ -11,6 +11,8 @@ router.get("/logout", verifyToken, logout);
 router.get("/test", verifyToken)
 router.get("/jwtGetUser", jwtGetUser)
 router.post("/saveQuery", saveQuery)
+router.get("/userTransactions/:user_id", userTransactions)
+
 // router.get("/authTemp", verifyToken, authTemp)
 
 
