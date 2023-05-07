@@ -1,33 +1,221 @@
-import {React, useContext} from 'react'
+import { React, useContext, useEffect } from 'react'
 import { FcMoneyTransfer } from "react-icons/fc";
-import { BsFillPersonFill } from "react-icons/bs";
-import { HiOutlineLogout} from "react-icons/hi"
+import { BsFillPersonFill, BsCashStack  } from "react-icons/bs";
+import {BiTransfer} from "react-icons/bi"
+import { HiOutlineLogout } from "react-icons/hi"
 import Button from 'react-bootstrap/esm/Button';
 
 // import {  } from "react";
 import { TestContext } from "../../contexts/TestContext";
 
-function SideBar({handleLogout}) {
+function SideBar({ handleLogout }) {
+    const userTransactions = [
+        {
+            "_id": "6456972325695fd202e492b2",
+            "user_id": "6436b3ce923ccbc912aa18e9",
+            "alias": "jfkla;jfklsjf;slkdjfklsdjfa;lskdfjs;lkfj; overflow is expanding the sidebar(to be fixed)",
+            "step": 0,
+            "amount": 11,
+            "oldbalanceOrg": 100,
+            "oldbalanceDest": 90,
+            "origBalance_inacc": -1,
+            "destBalance_inacc": 1,
+            "type_CASH_OUT": 1,
+            "type_TRANSFER": 0,
+            "__v": 0
+        },
+        {
+            "_id": "6456a6e474b67988a62b6241",
+            "user_id": "6436b3ce923ccbc912aa18e9",
+            "alias": "parseint",
+            "step": 0,
+            "amount": 11,
+            "oldbalanceOrg": 100,
+            "oldbalanceDest": 90,
+            "origBalance_inacc": -1,
+            "destBalance_inacc": 2,
+            "type_CASH_OUT": 1,
+            "type_TRANSFER": 0,
+            "__v": 0
+        },
+        {
+            "_id": "64574cced01f5ded4623a878",
+            "user_id": "6436b3ce923ccbc912aa18e9",
+            "alias": "sussy?",
+            "step": 18,
+            "amount": 0,
+            "oldbalanceOrg": 0,
+            "oldbalanceDest": 0,
+            "origBalance_inacc": 0,
+            "destBalance_inacc": 0,
+            "type_CASH_OUT": 0,
+            "type_TRANSFER": 1,
+            "__v": 0
+        },
+        {
+            "_id": "64574d2cd01f5ded4623a87a",
+            "user_id": "6436b3ce923ccbc912aa18e9",
+            "alias": "234",
+            "step": 1,
+            "amount": 234,
+            "oldbalanceOrg": 234,
+            "oldbalanceDest": 234,
+            "origBalance_inacc": -234,
+            "destBalance_inacc": 234,
+            "type_CASH_OUT": 0,
+            "type_TRANSFER": 1,
+            "__v": 0
+        },
+        {
+            "_id": "645765426e8ef7bf03e88eb9",
+            "user_id": "6436b3ce923ccbc912aa18e9",
+            "alias": "234",
+            "step": 1,
+            "amount": 234,
+            "oldbalanceOrg": 234,
+            "oldbalanceDest": 234,
+            "origBalance_inacc": -234,
+            "destBalance_inacc": 234,
+            "type_CASH_OUT": 0,
+            "type_TRANSFER": 1,
+            "__v": 0
+        },
+        {
+            "_id": "6456972325695fd202e492b2",
+            "user_id": "6436b3ce923ccbc912aa18e9",
+            "alias": "hehehehehahahahh",
+            "step": 0,
+            "amount": 11,
+            "oldbalanceOrg": 100,
+            "oldbalanceDest": 90,
+            "origBalance_inacc": -1,
+            "destBalance_inacc": 1,
+            "type_CASH_OUT": 1,
+            "type_TRANSFER": 0,
+            "__v": 0
+        },
+        {
+            "_id": "6456a6e474b67988a62b6241",
+            "user_id": "6436b3ce923ccbc912aa18e9",
+            "alias": "parseint",
+            "step": 0,
+            "amount": 11,
+            "oldbalanceOrg": 100,
+            "oldbalanceDest": 90,
+            "origBalance_inacc": -1,
+            "destBalance_inacc": 2,
+            "type_CASH_OUT": 1,
+            "type_TRANSFER": 0,
+            "__v": 0
+        },
+        {
+            "_id": "64574cced01f5ded4623a878",
+            "user_id": "6436b3ce923ccbc912aa18e9",
+            "alias": "sussy?",
+            "step": 18,
+            "amount": 0,
+            "oldbalanceOrg": 0,
+            "oldbalanceDest": 0,
+            "origBalance_inacc": 0,
+            "destBalance_inacc": 0,
+            "type_CASH_OUT": 0,
+            "type_TRANSFER": 1,
+            "__v": 0
+        },
+        {
+            "_id": "64574d2cd01f5ded4623a87a",
+            "user_id": "6436b3ce923ccbc912aa18e9",
+            "alias": "234",
+            "step": 1,
+            "amount": 234,
+            "oldbalanceOrg": 234,
+            "oldbalanceDest": 234,
+            "origBalance_inacc": -234,
+            "destBalance_inacc": 234,
+            "type_CASH_OUT": 0,
+            "type_TRANSFER": 1,
+            "__v": 0
+        },
+        {
+            "_id": "645765426e8ef7bf03e88eb9",
+            "user_id": "6436b3ce923ccbc912aa18e9",
+            "alias": "234",
+            "step": 1,
+            "amount": 234,
+            "oldbalanceOrg": 234,
+            "oldbalanceDest": 234,
+            "origBalance_inacc": -234,
+            "destBalance_inacc": 234,
+            "type_CASH_OUT": 0,
+            "type_TRANSFER": 1,
+            "__v": 0
+        },{
+            "_id": "6456972325695fd202e492b2",
+            "user_id": "6436b3ce923ccbc912aa18e9",
+            "alias": "hehehehehahahahh",
+            "step": 0,
+            "amount": 11,
+            "oldbalanceOrg": 100,
+            "oldbalanceDest": 90,
+            "origBalance_inacc": -1,
+            "destBalance_inacc": 1,
+            "type_CASH_OUT": 1,
+            "type_TRANSFER": 0,
+            "__v": 0
+        },
+        {
+            "_id": "6456a6e474b67988a62b6241",
+            "user_id": "6436b3ce923ccbc912aa18e9",
+            "alias": "parseint",
+            "step": 0,
+            "amount": 11,
+            "oldbalanceOrg": 100,
+            "oldbalanceDest": 90,
+            "origBalance_inacc": -1,
+            "destBalance_inacc": 2,
+            "type_CASH_OUT": 1,
+            "type_TRANSFER": 0,
+            "__v": 0
+        },
+        
+    ]
+
+
+
     const { user, setUser } = useContext(TestContext);
     const sidebarItemsClasses = 'flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 rounded-sm text-base'
+    // useEffect(() => {
+    //     fetch(`http://localhost:8080/auth/userTransactions/`)
+    // })
     return (
         <div className="flex flex-col bg-neutral-900  w-60 text-white">
-            <div className='flex items-center gap-2 px-1 py-3'>
+            <div className='flex items-center gap-2 px-2 py-3'>
                 <FcMoneyTransfer fontSize={26} />
                 <span className='text-neutral-100 text-lg'>Fraud Detection</span>
             </div>
 
-            <div className='flex-1 py-8 flex flex-col gap-0.5 text-neutral-400'>
+            <div className = 'flex px-4 py-3 gap-0.5 pt-1 border-b border-neutral-700'>
+                <span> Your Transactions :</span>
+            </div>
+
+            <div className='flex-1 flex flex-col text-left pt-2 px-3 gap-0.5 text-neutral-400 overflow-auto'>
+                {userTransactions.map((item) => (
+                    // <div onClick={handleClick(item)} key={item._id}>
+                    //     {item.alias}
+                    //     {item.amount}
+                    // </div>
+                    <SideBarItems key={item._id} item={item}/>
+                ))}
             </div>
 
 
             <div className=' gap-0.5 pt-2 border-t border-neutral-700'>
-                <div className = 'flex items-center gap-2 px-3 py-2 text-neutral-400'>
-                    <BsFillPersonFill fontSize = {20}/>
+                <div className='flex items-center gap-2 px-3 py-2 text-neutral-400'>
+                    <BsFillPersonFill fontSize={20} />
                     <span> {user.firstName} {user.lastName}</span>
                 </div>
-                <div onClick={handleLogout} className='flex  text-red-500 items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 rounded-sm text-base' >
-                    <HiOutlineLogout/>
+                <div onClick={handleLogout} className='flex  text-red-500 items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 rounded-sm text-base cursor-pointer' >
+                    <HiOutlineLogout />
                     <span>Logout</span>
                 </div>
             </div>
@@ -37,14 +225,25 @@ function SideBar({handleLogout}) {
     )
 }
 
-// function SideBarItems({item}){
-//     return(
-//         <Link>
+function SideBarItems({ item }) {
+    if (item.type_CASH_OUT == 1) {
+        return (
+            <div className='flex items-center gap-3 font-light px-1 py-1 hover:bg-neutral-700 hover:no-underline hover:text-white active:bg-neutral-600 rounded-md text-base cursor-pointer overflow-hidden'>
+                <span className='text-xl'><BsCashStack/></span>
+                {item.alias}
+            </div>
+    )}
+    else{
+        return (
+            <div className='flex items-center gap-3 font-light px-1 py-1 hover:bg-neutral-700 hover:no-underline hover:text-white active:bg-neutral-600 rounded-md text-base cursor-pointer overflow-hidden'>
+                <span className='text-xl'><BiTransfer/></span>
+                {item.alias}
+            </div>
+    )
+    }
+}
 
-//         </Link>
-//     )
-// }
-
+const handleClick = (item) =>{}
 // qid, amount, orig bal, expandable card, id feild
 
 export default SideBar
