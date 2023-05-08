@@ -11,7 +11,10 @@ import { TestContext } from '../../contexts/TestContext';
 
 
 
-function ContentDashboard() {
+function ContentDashboard(props) {
+
+    const queries = props.queries;
+    const setQueries = props.setQueries;
 
     var oldBalanceOrig = 0
     var newBalanceOrig = 0
@@ -55,6 +58,8 @@ function ContentDashboard() {
             .then((res)=>res.text())
             .then((data)=>console.log(data))
             .catch((err) => console.log(err.message));
+
+        setQueries(!queries);
 
         clearForm()
     }

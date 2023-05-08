@@ -10,6 +10,8 @@ import ContentDashboard from "./ContentDashboard";
 
 function DashBoard() {
   const { setUser, user } = useContext(TestContext);
+  const {queries, setQueries} = useState(0);
+
   const navigate = useNavigate();
   useEffect(() => {
     console.log("dashboard useEffect new context");
@@ -60,13 +62,13 @@ function DashBoard() {
         sidebar
       </div> */}
 
-      <SideBar handleLogout={logout} WelcomeUser = {user}/>
+      <SideBar handleLogout={logout} WelcomeUser = {user} queries={queries} setQueries={setQueries}/>
       {/* <div className="p-4">
         <div className="bg-slate-500">
           main
         </div>
       </div> */}
-      <ContentDashboard />
+      <ContentDashboard queries={queries} setQueries={setQueries}/>
     </div>
   );
 }

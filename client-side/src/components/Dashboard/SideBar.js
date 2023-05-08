@@ -8,94 +8,98 @@ import Button from 'react-bootstrap/esm/Button';
 // import {  } from "react";
 import { TestContext } from "../../contexts/TestContext";
 
-function SideBar({ handleLogout }) {
-    const userTransactions = [
-        {
-            "_id": "6456972325695fd202e492b2",
-            "user_id": "6436b3ce923ccbc912aa18e9",
-            "alias": "jfkla;jfklsjf;slkdjfklsdjfa;lskdfjs;lkfj; overflow is expanding the sidebar(to be fixed)",
-            "step": 0,
-            "amount": 11,
-            "oldbalanceOrg": 100,
-            "oldbalanceDest": 90,
-            "origBalance_inacc": -1,
-            "destBalance_inacc": 1,
-            "type_CASH_OUT": 1,
-            "type_TRANSFER": 0,
-            "__v": 0
-        },
-        {
-            "_id": "6456a6e474b67988a62b6241",
-            "user_id": "6436b3ce923ccbc912aa18e9",
-            "alias": "parseint",
-            "step": 0,
-            "amount": 11,
-            "oldbalanceOrg": 100,
-            "oldbalanceDest": 90,
-            "origBalance_inacc": -1,
-            "destBalance_inacc": 2,
-            "type_CASH_OUT": 1,
-            "type_TRANSFER": 0,
-            "__v": 0
-        },
-        {
-            "_id": "64574cced01f5ded4623a878",
-            "user_id": "6436b3ce923ccbc912aa18e9",
-            "alias": "sussy?",
-            "step": 18,
-            "amount": 0,
-            "oldbalanceOrg": 0,
-            "oldbalanceDest": 0,
-            "origBalance_inacc": 0,
-            "destBalance_inacc": 0,
-            "type_CASH_OUT": 0,
-            "type_TRANSFER": 1,
-            "__v": 0
-        },
-        {
-            "_id": "64574d2cd01f5ded4623a87a",
-            "user_id": "6436b3ce923ccbc912aa18e9",
-            "alias": "234",
-            "step": 1,
-            "amount": 234,
-            "oldbalanceOrg": 234,
-            "oldbalanceDest": 234,
-            "origBalance_inacc": -234,
-            "destBalance_inacc": 234,
-            "type_CASH_OUT": 0,
-            "type_TRANSFER": 1,
-            "__v": 0
-        },
-        {
-            "_id": "645765426e8ef7bf03e88eb9",
-            "user_id": "6436b3ce923ccbc912aa18e9",
-            "alias": "234",
-            "step": 1,
-            "amount": 234,
-            "oldbalanceOrg": 234,
-            "oldbalanceDest": 234,
-            "origBalance_inacc": -234,
-            "destBalance_inacc": 234,
-            "type_CASH_OUT": 0,
-            "type_TRANSFER": 1,
-            "__v": 0
-        },
-        {
-            "_id": "6456972325695fd202e492b2",
-            "user_id": "6436b3ce923ccbc912aa18e9",
-            "alias": "hehehehehahahahh",
-            "step": 0,
-            "amount": 11,
-            "oldbalanceOrg": 100,
-            "oldbalanceDest": 90,
-            "origBalance_inacc": -1,
-            "destBalance_inacc": 1,
-            "type_CASH_OUT": 1,
-            "type_TRANSFER": 0,
-            "__v": 0
-        },
+function SideBar( props ) {
 
-    ]
+    const queries = props.queries;
+    const setQueries = props.setQueries;
+
+    // const userTransactions = [
+    //     {
+    //         "_id": "6456972325695fd202e492b2",
+    //         "user_id": "6436b3ce923ccbc912aa18e9",
+    //         "alias": "jfkla;jfklsjf;slkdjfklsdjfa;lskdfjs;lkfj; overflow is expanding the sidebar(to be fixed)",
+    //         "step": 0,
+    //         "amount": 11,
+    //         "oldbalanceOrg": 100,
+    //         "oldbalanceDest": 90,
+    //         "origBalance_inacc": -1,
+    //         "destBalance_inacc": 1,
+    //         "type_CASH_OUT": 1,
+    //         "type_TRANSFER": 0,
+    //         "__v": 0
+    //     },
+    //     {
+    //         "_id": "6456a6e474b67988a62b6241",
+    //         "user_id": "6436b3ce923ccbc912aa18e9",
+    //         "alias": "parseint",
+    //         "step": 0,
+    //         "amount": 11,
+    //         "oldbalanceOrg": 100,
+    //         "oldbalanceDest": 90,
+    //         "origBalance_inacc": -1,
+    //         "destBalance_inacc": 2,
+    //         "type_CASH_OUT": 1,
+    //         "type_TRANSFER": 0,
+    //         "__v": 0
+    //     },
+    //     {
+    //         "_id": "64574cced01f5ded4623a878",
+    //         "user_id": "6436b3ce923ccbc912aa18e9",
+    //         "alias": "sussy?",
+    //         "step": 18,
+    //         "amount": 0,
+    //         "oldbalanceOrg": 0,
+    //         "oldbalanceDest": 0,
+    //         "origBalance_inacc": 0,
+    //         "destBalance_inacc": 0,
+    //         "type_CASH_OUT": 0,
+    //         "type_TRANSFER": 1,
+    //         "__v": 0
+    //     },
+    //     {
+    //         "_id": "64574d2cd01f5ded4623a87a",
+    //         "user_id": "6436b3ce923ccbc912aa18e9",
+    //         "alias": "234",
+    //         "step": 1,
+    //         "amount": 234,
+    //         "oldbalanceOrg": 234,
+    //         "oldbalanceDest": 234,
+    //         "origBalance_inacc": -234,
+    //         "destBalance_inacc": 234,
+    //         "type_CASH_OUT": 0,
+    //         "type_TRANSFER": 1,
+    //         "__v": 0
+    //     },
+    //     {
+    //         "_id": "645765426e8ef7bf03e88eb9",
+    //         "user_id": "6436b3ce923ccbc912aa18e9",
+    //         "alias": "234",
+    //         "step": 1,
+    //         "amount": 234,
+    //         "oldbalanceOrg": 234,
+    //         "oldbalanceDest": 234,
+    //         "origBalance_inacc": -234,
+    //         "destBalance_inacc": 234,
+    //         "type_CASH_OUT": 0,
+    //         "type_TRANSFER": 1,
+    //         "__v": 0
+    //     },
+    //     {
+    //         "_id": "6456972325695fd202e492b2",
+    //         "user_id": "6436b3ce923ccbc912aa18e9",
+    //         "alias": "hehehehehahahahh",
+    //         "step": 0,
+    //         "amount": 11,
+    //         "oldbalanceOrg": 100,
+    //         "oldbalanceDest": 90,
+    //         "origBalance_inacc": -1,
+    //         "destBalance_inacc": 1,
+    //         "type_CASH_OUT": 1,
+    //         "type_TRANSFER": 0,
+    //         "__v": 0
+    //     },
+
+    // ]
 
     // const { user, setUser } = useContext(TestContext);
     const UserContext = useContext(TestContext)
@@ -107,7 +111,7 @@ function SideBar({ handleLogout }) {
         .then((res)=>res.json())
         .then((data)=>{setAllUserTransaction(data);console.log(data)})
         .catch((err)=>console.log(err))
-    },[]);
+    },[queries]);
     
 
     return (
@@ -137,7 +141,7 @@ function SideBar({ handleLogout }) {
                     <BsFillPersonFill fontSize={20} />
                     <span> {UserContext.user.firstName} {UserContext.user.lastName}</span>
                 </div>
-                <div onClick={handleLogout} className='flex  text-red-500 items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 rounded-sm text-base cursor-pointer' >
+                <div onClick={props.handleLogout} className='flex  text-red-500 items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 rounded-sm text-base cursor-pointer' >
                     <HiOutlineLogout />
                     <span>Logout</span>
                 </div>
@@ -149,7 +153,7 @@ function SideBar({ handleLogout }) {
 }
 
 function SideBarItems({ item }) {
-    if (item.type_CASH_OUT == 1) {
+    if (item.type_CASH_OUT === 1) {
         return (
             <div onClick={()=>handleClick(item)} className='flex items-center gap-3 font-light px-1 py-1 hover:bg-neutral-700 hover:no-underline hover:text-white active:bg-neutral-600 rounded-md text-base cursor-pointer'>
                 <span className='text-xl'><BsCashStack/></span>
