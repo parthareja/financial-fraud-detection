@@ -77,7 +77,7 @@ export const login = async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: "Invalid password." });
-    const maxAge = 10 * 60;
+    const maxAge = 60 * 30;
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: maxAge,
     });
@@ -92,8 +92,21 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  res.cookie("jwt", "", { maxAge: 1 }); //////////////////////////////////// BAD WAY TO DO
-  res.send("logged out");
+  try {
+    let cookies = {};
+    const cookiesArray = req.headers.cookie.split(";");
+    cookiesArray.forEach((cookie) => {
+      const [key, value] = cookie.trim().split("=");
+      cookies[key] = value;
+    });
+    const userjwt = cookies["jwt"];
+
+    
+  } catch {
+    res.send(false);
+    res.cookie("jwt", "", { maxAge: 1 }); //////////////////////////////////// BAD WAY TO DO
+    res.send(false);
+  }
 };
 
 // export const authTemp = async (req, res) => {

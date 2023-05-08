@@ -4,6 +4,7 @@
 // const dotenv = require("dotenv").config();
 // const express = require("express");
 // const register = require("./controllers/auth.js");
+import { createClient } from "redis";
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -55,3 +56,19 @@ mongoose
     app.listen(PORT, () => console.log(`server port: ${PORT}`));
   })
   .catch((error) => console.log(`${error}, did not connect`));
+
+const redisClient = createClient({
+  password: "pNEAZmplzuzGowEfenauaExS05fTuHO7",
+  socket: {
+    host: "redis-17085.c264.ap-south-1-1.ec2.cloud.redislabs.com",
+    port: 17085,
+  },
+});
+redisClient.on("error", (error) => {
+  console.log(error);
+});
+redisClient.on("connect", () => {
+  console.log("Redis connected!");
+});
+
+redisClient.connect();

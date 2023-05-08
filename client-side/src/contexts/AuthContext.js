@@ -42,9 +42,12 @@ export const AuthProvider = ({ children }) => {
       console.log("Inside defaultLogin", user);
       // setUser(undefined);
 
-      const temp = await axios.get("http://localhost:8080/auth/jwtGetUser", {
-        withCredentials: true,
-      });
+      const temp = await axios.get(
+        "http://localhost:8080/auth/defaultLoginJWTGetUser",
+        {
+          withCredentials: true,
+        }
+      );
 
       var authorized = temp.data;
       console.log(authorized);
