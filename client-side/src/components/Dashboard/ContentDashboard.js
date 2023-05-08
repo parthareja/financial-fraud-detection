@@ -32,6 +32,7 @@ function ContentDashboard() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        // window.location.reload(false);
         const datajson = {
             user_id : user._id,
             amount: transactionAmount,
