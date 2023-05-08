@@ -1,16 +1,18 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import Cookies from "js-cookie";
+
+import User from "../models/User.js";
+import { redisClient } from "../index.js";
 // import * as dotenv from "dotenv";
 
 // const bcrypt = require("bcrypt");
 // const jwt = require("jsonwebtoken");
 // const User = require("../models/User.js");
 
-// dotenv.config();
+const maxAge = 60 * 30;
 
 //handle errors
 const handleErrors = (err) => {
@@ -53,7 +55,6 @@ export const register = async (req, res) => {
 
     const savedUser = await newUser.save();
 
-    const maxAge = 10 * 60;
     const token = jwt.sign({ id: savedUser._id }, process.env.JWT_SECRET, {
       expiresIn: maxAge,
     });
@@ -92,21 +93,40 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  try {
-    let cookies = {};
-    const cookiesArray = req.headers.cookie.split(";");
-    cookiesArray.forEach((cookie) => {
-      const [key, value] = cookie.trim().split("=");
-      cookies[key] = value;
-    });
-    const userjwt = cookies["jwt"];
+  var userjwt = 0;
 
-    
-  } catch {
-    res.send(false);
-    res.cookie("jwt", "", { maxAge: 1 }); //////////////////////////////////// BAD WAY TO DO
-    res.send(false);
-  }
+  // try {
+  //   let cookies = {};
+  //   const cookiesArray = req.headers.cookie.split(";");
+  //   cookiesArray.forEach((cookie) => {
+  //     const [key, value] = cookie.trim().split("=");
+  //     cookies[key] = value;
+  //   });
+  //   userjwt = cookies["jwt"];
+  //   const token_key = `bl_${userjwt}`;
+  //   await redisClient.set(token_key, userjwt);
+  //   redisClient.expireAt(token_key, maxAge);
+  //   res.send("logged out and token invalidated");
+  // } catch (err) {
+  //   console.log(err);
+  //   res.cookie("jwt", "", { maxAge: 1 }); //////////////////////////////////// BAD WAY TO DO
+  //   res.send(false);
+  // }
+  let cookies = {};
+  const cookiesArray = req.headers.cookie.split(";");
+  cookiesArray.forEach((cookie) => {
+    const [key, value] = cookie.trim().split("=");
+    cookies[key] = value;
+  });
+  userjwt = cookies["jwt"];
+  const token_key = `bl_${userjwt}`;
+  console.log("token_key ", token_key);
+  await redisClient.set(token_key, userjwt);
+  console.log(await redisClient.get(token_key));
+  redisClient.expire(token_key, maxAge);
+  res.cookie("jwt", "", { maxAge: 1 }); //////////////////////////////////// BAD WAY TO DO
+  res.send(false);
+  console.log("logged out and token invalidated");
 };
 
 // export const authTemp = async (req, res) => {

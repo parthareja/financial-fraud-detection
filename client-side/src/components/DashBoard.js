@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 // import { useUser } from "../contexts/UserContext";
 import { useEffect } from "react";
-// import { useContext } from "react";
+
 import { TestContext } from "../contexts/TestContext";
 
 import Button from "react-bootstrap/Button";
@@ -23,6 +23,7 @@ function DashBoard() {
     const res = await fetch("http://localhost:8080/auth/logout", {
       credentials: "include",
     });
+    console.log(res)
     setUser(false);
     console.log(user);
     // localStorage.setItem("user", null)

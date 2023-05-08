@@ -57,7 +57,7 @@ mongoose
   })
   .catch((error) => console.log(`${error}, did not connect`));
 
-const redisClient = createClient({
+export const redisClient = createClient({
   password: "pNEAZmplzuzGowEfenauaExS05fTuHO7",
   socket: {
     host: "redis-17085.c264.ap-south-1-1.ec2.cloud.redislabs.com",
@@ -72,3 +72,5 @@ redisClient.on("connect", () => {
 });
 
 redisClient.connect();
+
+// module.exports = redisClient;
