@@ -121,11 +121,10 @@ export const logout = async (req, res) => {
   });
   userjwt = cookies["jwt"];
   const token_key = `bl_${userjwt}`;
-  console.log("token_key ", token_key);
   await redisClient.set(token_key, userjwt);
-  console.log(await redisClient.get(token_key));
   redisClient.expire(token_key, maxAge);
-  res.cookie("jwt", "", { maxAge: 1 }); //////////////////////////////////// BAD WAY TO DO
+  // res.cookie("jwt", "", { maxAge: 1 }); //////////////////////////////////// BAD WAY TO DO
+  res.clearCookie("jwt");
   res.send(false);
   console.log("logged out and token invalidated");
 };
@@ -149,7 +148,7 @@ function getPayloadFromToken(token) {
 }
 
 //JWT TO USER_INFO
-export const jwtGetUser = async (req, res, next) => {
+export const defaultLoginJWTGetUser = async (req, res, next) => {
   try {
     // console.log("fetching user data from jwt");
     let cookies = {};
@@ -177,27 +176,25 @@ export const jwtGetUser = async (req, res, next) => {
   }
 };
 
-export const saveQuery = async(req,res)=>{
-  try{
-    const query = new QueryData(req.body)
-    await query.save()
-    res.set("Access-Control-Allow-Origin", "*")
-    res.send("Qery data stored successfully")
+export const saveQuery = async (req, res) => {
+  try {
+    const query = new QueryData(req.body);
+    await query.save();
+    res.set("Access-Control-Allow-Origin", "*");
+    res.send("Qery data stored successfully");
+  } catch (err) {
+    console.log(err.message);
+    res.send({ msg: err });
   }
-  catch(err){
-    console.log(err.message)
-    res.send({msg:err})
-  }
-}
+};
 
-export const userTransactions = async(req, res)=>{
-  try{
-    const {user_id} = req.params
-    const data = await QueryData.find({user_id :user_id});
-    res.set("Access-Control-Allow-Origin", "*")
+export const userTransactions = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const data = await QueryData.find({ user_id: user_id });
+    res.set("Access-Control-Allow-Origin", "*");
     res.json(data);
+  } catch (err) {
+    res.send({ msg: err });
   }
-  catch(err){
-    res.send({'msg':err})
-  }
-}
+};

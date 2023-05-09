@@ -26,7 +26,7 @@ function DashBoard() {
       credentials: "include",
     });
     setUser(false);
-    console.log(user);
+    // console.log(user);
     // localStorage.setItem("user", null)
     navigate("/signin");
   }

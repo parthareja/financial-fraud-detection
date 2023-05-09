@@ -18,9 +18,9 @@ export const verifyToken = async (req, res, next) => {
     });
     const userjwt = cookies["jwt"]; ////////////// change jwtLogin to jwt at all places
 
-    console.log("deny list check token key > ", `bl_${userjwt}`);
+    // console.log("deny list check token key > ", `bl_${userjwt}`);
     const inDenyList = await redisClient.get(`bl_${userjwt}`);
-    console.log(inDenyList);
+    // console.log(inDenyList);
     if (inDenyList) {
       res.send(false);
       console.log("blacklisted");
