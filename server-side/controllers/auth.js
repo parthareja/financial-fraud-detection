@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import Cookies from "js-cookie";
+import QueryData from "../models/QueryData.js";
 
 import User from "../models/User.js";
 import { redisClient } from "../index.js";
@@ -175,3 +176,28 @@ export const jwtGetUser = async (req, res, next) => {
     res.send(false);
   }
 };
+
+export const saveQuery = async(req,res)=>{
+  try{
+    const query = new QueryData(req.body)
+    await query.save()
+    res.set("Access-Control-Allow-Origin", "*")
+    res.send("Qery data stored successfully")
+  }
+  catch(err){
+    console.log(err.message)
+    res.send({msg:err})
+  }
+}
+
+export const userTransactions = async(req, res)=>{
+  try{
+    const {user_id} = req.params
+    const data = await QueryData.find({user_id :user_id});
+    res.set("Access-Control-Allow-Origin", "*")
+    res.json(data);
+  }
+  catch(err){
+    res.send({'msg':err})
+  }
+}

@@ -26,7 +26,4 @@ node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-server-side/yarn.lock
-client-side/yarn.lock
-server-side/package-lock.json
+yarn.lock

@@ -8,7 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import AuthApi from "./utils/AuthApi";
-import DashBoard from "./components/DashBoard";
+import DashBoard from "./components/Dashboard/DashBoard";
 import TestDev from "./components/TestDev";
 
 import { UserProvider } from "./contexts/UserContext";

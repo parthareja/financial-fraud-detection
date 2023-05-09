@@ -1,13 +1,16 @@
 import mongoose from "mongoose";
 
-
 const queryDataSchema = new mongoose.Schema({
+    user_id : {
+        type: String,
+        required: true
+    },
     alias: {
       type: String,
       required: [true, "Please enter an alias for your query"]
     },
     step: {
-        type: Int16Array,
+        type: Number,
         required: [true, "Please enter time step"],
       },
     amount: {
@@ -16,31 +19,27 @@ const queryDataSchema = new mongoose.Schema({
     },
     oldbalanceOrg: {
       type: Number,
-      required: [true, "Please enter amt"],
+      required: [true, "Please enter Old Origin Balance"],
     },
     oldbalanceDest: {
       type: Number,
-      required: [true, "Please enter amt"],
+      required: [true, "Please enter Old Destination Balance"],
     },
     origBalance_inacc: {
       type: Number,
-      required: [true, "Please enter amt"],
+      required: [true, "Origin Balance Innaccuracy not calculated"],
     },
     destBalance_inacc: {
       type: Number,
-      required: [true, "Please enter amt"],
+      required: [true, "Destination Balance Inaccuracy not calculated"],
     },
     type_CASH_OUT: {
-      type: Int16Array,
+      type: Number,
       required: [true, "Please enter transaction type"],
-      min: [0, "bw 0 and 1"],
-      max: [1, "bw 0 and 1"],
     },      
     type_TRANSFER: {
-      type: Int16Array,
+      type: Number,
       required: [true, "Please enter transaction type"],
-      min: [0, "bw 0 and 1"],
-      max: [1, "bw 0 and 1"]
     },
 });
 
