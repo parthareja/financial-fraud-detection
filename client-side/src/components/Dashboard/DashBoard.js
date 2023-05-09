@@ -12,11 +12,11 @@ function DashBoard() {
   const { setUser, user } = useContext(TestContext);
   const [queriesUpdate, setQueriesUpdate] = useState(0);
   // setQueries(1);
-  console.log("Dashboard queries, ", queriesUpdate);
+  // console.log("Dashboard queries, ", queriesUpdate);
   const navigate = useNavigate();
   useEffect(() => {
-    console.log("dashboard useEffect new context");
-    console.log(user);
+    // console.log("dashboard useEffect new context");
+    // console.log(user);
     if (!user) {
       navigate("/signin");
     }
