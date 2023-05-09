@@ -10,8 +10,9 @@ import ContentDashboard from "./ContentDashboard";
 
 function DashBoard() {
   const { setUser, user } = useContext(TestContext);
-  const {queries, setQueries} = useState(0);
-
+  const [queriesUpdate, setQueriesUpdate] = useState(0);
+  // setQueries(1);
+  console.log("Dashboard queries, ", queriesUpdate);
   const navigate = useNavigate();
   useEffect(() => {
     console.log("dashboard useEffect new context");
@@ -19,7 +20,7 @@ function DashBoard() {
     if (!user) {
       navigate("/signin");
     }
-  }, [user]);
+  }, [user, queriesUpdate]);
 
   async function logout() {
     const res = await fetch("http://localhost:8080/auth/logout", {
@@ -42,7 +43,6 @@ function DashBoard() {
     //   <button onClick={logout}>Logout</button>
     // </div>
 
-
     // <div className="h-screen w-screen  bg-slate-300">
     //   <div className = "flex bg-slate-600 bg-slate">
     //     <div className = "bg-orange-300 w-1/4 min-h-screen">
@@ -55,20 +55,26 @@ function DashBoard() {
     //   </div>
     // </div>
 
-
-
     <div className="flex flex-row bg-neutral-100 w-screen h-screen">
       {/* <div className="bg-sky-200">
         sidebar
       </div> */}
 
-      <SideBar handleLogout={logout} WelcomeUser = {user} queries={queries} setQueries={setQueries}/>
+      <SideBar
+        handleLogout={logout}
+        WelcomeUser={user}
+        queriesUpdate={queriesUpdate}
+        setQueriesUpdate={setQueriesUpdate}
+      />
       {/* <div className="p-4">
         <div className="bg-slate-500">
           main
         </div>
       </div> */}
-      <ContentDashboard queries={queries} setQueries={setQueries}/>
+      <ContentDashboard
+        queriesUpdate={queriesUpdate}
+        setQueriesUpdate={setQueriesUpdate}
+      />
     </div>
   );
 }
