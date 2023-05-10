@@ -102,6 +102,7 @@ function ContentDashboard(props) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(datajson),
+      credentials: "include",
     })
       .then((data) => console.log(data))
       .catch((err) => console.log(err.message));

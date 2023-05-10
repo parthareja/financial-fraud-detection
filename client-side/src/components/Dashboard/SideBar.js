@@ -4,6 +4,7 @@ import { BsFillPersonFill, BsCashStack } from "react-icons/bs";
 import { BiTransfer } from "react-icons/bi";
 import { HiOutlineLogout } from "react-icons/hi";
 import { Dialog } from "@headlessui/react";
+import axios from "axios";
 // import Modal from 'react-modal';
 
 import "./SideBar.css";
@@ -44,7 +45,13 @@ function SideBar(props) {
   const [time, setTime] = useState("");
 
   useEffect(() => {
-    fetch(`http://localhost:8080/auth/userTransactions/${UserContext.user._id}`)
+    fetch("http://localhost:8080/dashboard/test", {
+      credentials: "include",
+    }).then(console.log("MRA SHUSHE"));
+    fetch(
+      `http://localhost:8080/auth/userTransactions/${UserContext.user._id}`,
+      { credentials: "include" }
+    )
       .then((res) => res.json())
       .then((data) => {
         data.map((item) => {
@@ -59,6 +66,9 @@ function SideBar(props) {
         setAllUserTransaction(data);
         console.log(allUserTransactions);
         // console.log(data);
+      })
+      .catch((err) => {
+        console.log("shushuerr", err.message);
       })
       .catch((err) => console.log(err));
   }, [queries]);
@@ -160,8 +170,6 @@ function SideBarItems({ item, setModalShow, setModalData }) {
 // qid, amount, orig bal, expandable card, id feild
 
 function UserTransactionModal(props) {
-  console.log(props.data.type_TRANSFER);
-  console.log(props.data.type_CASH_OUT);
   const handleTimeStep = () => {
     var step = props.data.step - 1;
     let strtime;

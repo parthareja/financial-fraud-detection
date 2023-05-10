@@ -180,8 +180,9 @@ export const saveQuery = async (req, res) => {
   try {
     const query = new QueryData(req.body);
     await query.save();
-    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Origin", "http://localhost:3000");
     res.send("Qery data stored successfully");
+    // console.log
   } catch (err) {
     console.log(err.message);
     res.send({ msg: err });
@@ -192,7 +193,7 @@ export const userTransactions = async (req, res) => {
   try {
     const { user_id } = req.params;
     const data = await QueryData.find({ user_id: user_id });
-    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Origin", "http://localhost:3000");
     res.json(data);
   } catch (err) {
     res.send({ msg: err });
