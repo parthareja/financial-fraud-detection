@@ -9,19 +9,24 @@ import InputGroup from "react-bootstrap/InputGroup";
 import { BsPassFill } from "react-icons/bs";
 import { useState } from "react";
 
+import ResultModal from "./ResultModal.js";
+
 import { TestContext } from "../../contexts/TestContext";
 
 function ContentDashboard(props) {
+  const [typeCashOut, setTypeCashOut] = useState(true);
+  const [typeTransfer, setTypeTransfer] = useState(false);
+  const [showResultModal, setShowResultModal] = useState(false);
+
   const queries = props.queriesUpdate;
   const setQueries = props.setQueriesUpdate;
+  var resultData = "default";
 
   var oldBalanceOrig = 0;
   var newBalanceOrig = 0;
   var oldBalanceDest = 0;
   var newBalanceDest = 0;
   var transactionAmount = 0;
-  const [typeCashOut, setTypeCashOut] = useState(true);
-  const [typeTransfer, setTypeTransfer] = useState(false);
   var TransactionTime = 1;
   var transactionAlias = "";
 
@@ -49,24 +54,6 @@ function ContentDashboard(props) {
       step: TransactionTime,
       alias: transactionAlias,
     };
-    // const ml_datajson = {
-    //   step: TransactionTime.toString(),
-    //   amount: transactionAmount.toString(),
-    //   oldbalanceOrg: oldBalanceOrig.toString(),
-    //   oldbalanceDest: oldBalanceDest.toString(),
-    //   origBalance_inacc: (
-    //     oldBalanceOrig -
-    //     transactionAmount -
-    //     newBalanceOrig
-    //   ).toString(),
-    //   destBalance_inacc: (
-    //     oldBalanceDest +
-    //     transactionAmount -
-    //     newBalanceDest
-    //   ).toString(),
-    //   type_CASH_OUT: typeCashOut,
-    //   type_TRANSFER: typeTransfer,
-    // };
     const ml_datajson_array = [
       TransactionTime,
       transactionAmount,
@@ -78,13 +65,7 @@ function ContentDashboard(props) {
       typeTransfer,
     ];
 
-    const test_array = [
-      [1, 1, 1, 1, 0, 1, false, true],
-      [1, 1, 1, 1, 0, 1, false, true],
-    ];
-    console.log("ml query jsondata, ", ml_datajson_array);
-    // console.log("Array ml query jsondata, ", ml_datajson_array);
-    // console.log(datajson);
+    console.log("ml query jsondata, ", ml_datajson_array); // console.log(datajson);
 
     const POST_ml_query = async (record) => {
       const data = [record];
@@ -95,7 +76,10 @@ function ContentDashboard(props) {
         credentials: "include",
       })
         .then((res) => res.json())
-        .then((res) => console.log(res));
+        .then((res) => {
+          resultData = res;
+          setShowResultModal(true);
+        });
     };
 
     await fetch("http://localhost:8080/auth/saveQuery", {
@@ -132,6 +116,12 @@ function ContentDashboard(props) {
   return (
     <div className="flex justify-center container p-4 self-center">
       <div className="w-1/2 h-full ">
+        <ResultModal
+          data={resultData}
+          show={showResultModal}
+          onHide={() => setShowResultModal(false)}
+          showResultState={{ showResultModal, setShowResultModal }}
+        />
         <Form onSubmit={handleSubmit} id="mainForm">
           <Row className="mb-3">
             <Form.Group as={Col} controlId="formOldBalanceOrig">
