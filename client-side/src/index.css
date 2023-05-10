@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.modal-backdrop
+{
+    opacity:0.5 !important;
+}
+
+.fade-modal-show{
+    opacity:0.5 !important;
+}

@@ -1,0 +1,12 @@
+/* .modal-backdrop
+{
+    opacity:0.5 !important;
+} */
+
+/* .fade-modal-show{
+    opacity:0.5 !important;
+} */
+
+.modal-overlay{
+    background-color: rgba(128,128,100,0.5)
+}

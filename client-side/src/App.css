@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.modal-backdrop
+{
+    opacity:0.5 !important;
+}
+
+.fade-modal-show{
+    opacity:0.5 !important;
+}

@@ -198,3 +198,9 @@ export const userTransactions = async (req, res) => {
     res.send({ msg: err });
   }
 };
+
+// const handleQueryErrors = (err)=>{
+//   console.log(err.message,err.code);
+//   let errors = {user_id : "", alias: "",step:"",amount:"",oldbalanceOrg:"",oldbalanceDest:"",origBalance_inacc:"",destBalance_inacc:"",type_CASH_OUT:"",type_TRANSFER:""}
+
+// }

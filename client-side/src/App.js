@@ -4,6 +4,7 @@ import { Route, Routes, Link } from "react-router-dom";
 import React, { useDebugValue, useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css"
 
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";

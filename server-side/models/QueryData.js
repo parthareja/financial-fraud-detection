@@ -7,7 +7,8 @@ const queryDataSchema = new mongoose.Schema({
     },
     alias: {
       type: String,
-      required: [true, "Please enter an alias for your query"]
+      // unique:true,
+      required: [true, "Alias is a compulsary unique identifier"]
     },
     step: {
         type: Number,
@@ -24,6 +25,14 @@ const queryDataSchema = new mongoose.Schema({
     oldbalanceDest: {
       type: Number,
       required: [true, "Please enter Old Destination Balance"],
+    },
+    newbalanceOrg: {
+      type: Number,
+      required: [true, "Please enter New Origin Balance"],
+    },
+    newbalanceDest: {
+      type: Number,
+      required: [true, "Please enter New Destination Balance"],
     },
     origBalance_inacc: {
       type: Number,
