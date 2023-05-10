@@ -17,6 +17,7 @@ function ContentDashboard(props) {
   const [typeCashOut, setTypeCashOut] = useState(true);
   const [typeTransfer, setTypeTransfer] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
+  const [modalData, setModalData] = useState("default");
 
   const queries = props.queriesUpdate;
   const setQueries = props.setQueriesUpdate;
@@ -77,7 +78,8 @@ function ContentDashboard(props) {
       })
         .then((res) => res.json())
         .then((res) => {
-          resultData = res;
+          setModalData(res[0]);
+          console.log("modalData ,", res[0]);
           setShowResultModal(true);
         });
     };
@@ -117,7 +119,7 @@ function ContentDashboard(props) {
     <div className="flex justify-center container p-4 self-center">
       <div className="w-1/2 h-full ">
         <ResultModal
-          data={resultData}
+          data={modalData}
           show={showResultModal}
           onHide={() => setShowResultModal(false)}
           showResultState={{ showResultModal, setShowResultModal }}

@@ -45,9 +45,6 @@ function SideBar(props) {
   const [time, setTime] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:8080/dashboard/test", {
-      credentials: "include",
-    }).then(console.log("MRA SHUSHE"));
     fetch(
       `http://localhost:8080/auth/userTransactions/${UserContext.user._id}`,
       { credentials: "include" }
@@ -66,9 +63,6 @@ function SideBar(props) {
         setAllUserTransaction(data);
         console.log(allUserTransactions);
         // console.log(data);
-      })
-      .catch((err) => {
-        console.log("shushuerr", err.message);
       })
       .catch((err) => console.log(err));
   }, [queries]);

@@ -1,14 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { useEffect } from "react";
 
 const ResultModal = (props) => {
-  var bodyText = "";
-  if (props.data == false) {
-    const bodyText = "This transaction is genuine";
+  // const [reRender, setReRender] = useState(false);
+  const [resultText, setResultText] = useState("default");
+
+  var bodyText = "default";
+  var textColour = "green";
+  // useEffect(() => {
+  //   console.log("modal useEffect");
+  //   if (props.data == false) {
+  //     setResultText("This transaction is genuine");
+  //   } else {
+  //     setResultText("This transaction is FRAUDULENT");
+  //   }
+  //   // setReRender(!reRender);
+  // }, [props]);
+  if (props.data == "false") {
+    bodyText = "This transaction is genuine";
   } else {
-    const bodyText = "This transaction is FRAUDULENT";
+    console.log("result to declare FRAUDULENT", props.data);
+    bodyText = "This transaction is FRAUDULENT";
+    textColour = "red";
   }
+
+  console.log("props data after effect, ", props.data);
+  console.log("Text after effect > ", bodyText);
+  // console.log("bodyData > ", bodyText);
+
   return (
     <>
       <Modal
@@ -23,7 +44,7 @@ const ResultModal = (props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* <h4>{bodyText}</h4> */}
+          <h4 style={{ color: textColour }}>{bodyText}</h4>
           {/* <p></p> */}
         </Modal.Body>
         <Modal.Footer>
