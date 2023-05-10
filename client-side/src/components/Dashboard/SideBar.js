@@ -29,96 +29,9 @@ import "./SideBar.css"
 import { TestContext } from "../../contexts/TestContext";
 
 function SideBar(props) {
-    const queries = props.queriesUpdate;
-    console.log(queries);
-    const setQueries = props.setQueriesUpdate;
-
-    // const userTransactions = [
-    //     {
-    //         "_id": "6456972325695fd202e492b2",
-    //         "user_id": "6436b3ce923ccbc912aa18e9",
-    //         "alias": "jfkla;jfklsjf;slkdjfklsdjfa;lskdfjs;lkfj; overflow is expanding the sidebar(to be fixed)",
-    //         "step": 0,
-    //         "amount": 11,
-    //         "oldbalanceOrg": 100,
-    //         "oldbalanceDest": 90,
-    //         "origBalance_inacc": -1,
-    //         "destBalance_inacc": 1,
-    //         "type_CASH_OUT": 1,
-    //         "type_TRANSFER": 0,
-    //         "__v": 0
-    //     },
-    //     {
-    //         "_id": "6456a6e474b67988a62b6241",
-    //         "user_id": "6436b3ce923ccbc912aa18e9",
-    //         "alias": "parseint",
-    //         "step": 0,
-    //         "amount": 11,
-    //         "oldbalanceOrg": 100,
-    //         "oldbalanceDest": 90,
-    //         "origBalance_inacc": -1,
-    //         "destBalance_inacc": 2,
-    //         "type_CASH_OUT": 1,
-    //         "type_TRANSFER": 0,
-    //         "__v": 0
-    //     },
-    //     {
-    //         "_id": "64574cced01f5ded4623a878",
-    //         "user_id": "6436b3ce923ccbc912aa18e9",
-    //         "alias": "sussy?",
-    //         "step": 18,
-    //         "amount": 0,
-    //         "oldbalanceOrg": 0,
-    //         "oldbalanceDest": 0,
-    //         "origBalance_inacc": 0,
-    //         "destBalance_inacc": 0,
-    //         "type_CASH_OUT": 0,
-    //         "type_TRANSFER": 1,
-    //         "__v": 0
-    //     },
-    //     {
-    //         "_id": "64574d2cd01f5ded4623a87a",
-    //         "user_id": "6436b3ce923ccbc912aa18e9",
-    //         "alias": "234",
-    //         "step": 1,
-    //         "amount": 234,
-    //         "oldbalanceOrg": 234,
-    //         "oldbalanceDest": 234,
-    //         "origBalance_inacc": -234,
-    //         "destBalance_inacc": 234,
-    //         "type_CASH_OUT": 0,
-    //         "type_TRANSFER": 1,
-    //         "__v": 0
-    //     },
-    //     {
-    //         "_id": "645765426e8ef7bf03e88eb9",
-    //         "user_id": "6436b3ce923ccbc912aa18e9",
-    //         "alias": "234",
-    //         "step": 1,
-    //         "amount": 234,
-    //         "oldbalanceOrg": 234,
-    //         "oldbalanceDest": 234,
-    //         "origBalance_inacc": -234,
-    //         "destBalance_inacc": 234,
-    //         "type_CASH_OUT": 0,
-    //         "type_TRANSFER": 1,
-    //         "__v": 0
-    //     },
-    //     {
-    //         "_id": "6456972325695fd202e492b2",
-    //         "user_id": "6436b3ce923ccbc912aa18e9",
-    //         "alias": "hehehehehahahahh",
-    //         "step": 0,
-    //         "amount": 11,
-    //         "oldbalanceOrg": 100,
-    //         "oldbalanceDest": 90,
-    //         "origBalance_inacc": -1,
-    //         "destBalance_inacc": 1,
-    //         "type_CASH_OUT": 1,
-    //         "type_TRANSFER": 0,
-    //         "__v": 0
-    //     },
-    // ]
+  const queries = props.queriesUpdate;
+  // console.log(queries);
+  const setQueries = props.setQueriesUpdate;
 
     // const { user, setUser } = useContext(TestContext);
 
@@ -129,15 +42,15 @@ function SideBar(props) {
     const [modalData, setModalData] = useState({})
     const [time, setTime] = useState("")
 
-    useEffect(() => {
-        fetch(`http://localhost:8080/auth/userTransactions/${UserContext.user._id}`)
-            .then((res) => res.json())
-            .then((data) => {
-                setAllUserTransaction(data);
-                console.log(data);
-            })
-            .catch((err) => console.log(err));
-    }, [queries]);
+  useEffect(() => {
+    fetch(`http://localhost:8080/auth/userTransactions/${UserContext.user._id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setAllUserTransaction(data);
+        // console.log(data);
+      })
+      .catch((err) => console.log(err));
+  }, [queries]);
 
     return (
         <div className="flex flex-col bg-neutral-900  w-80 text-white">

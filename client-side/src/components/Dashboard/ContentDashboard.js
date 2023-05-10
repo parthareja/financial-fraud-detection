@@ -1,3 +1,4 @@
+import axios from "axios";
 import { React, useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
@@ -7,11 +8,11 @@ import Row from "react-bootstrap/Row";
 import InputGroup from "react-bootstrap/InputGroup";
 import { BsPassFill } from "react-icons/bs";
 import { useState } from "react";
+
 import { TestContext } from "../../contexts/TestContext";
 
 function ContentDashboard(props) {
   const queries = props.queriesUpdate;
-  console.log("passed queries, ", props.queries);
   const setQueries = props.setQueriesUpdate;
 
   var oldBalanceOrig = 0;
@@ -19,8 +20,8 @@ function ContentDashboard(props) {
   var oldBalanceDest = 0;
   var newBalanceDest = 0;
   var transactionAmount = 0;
-  const [typeCashOut, setTypeCashOut] = useState(1);
-  const [typeTransfer, setTypeTransfer] = useState(0);
+  const [typeCashOut, setTypeCashOut] = useState(true);
+  const [typeTransfer, setTypeTransfer] = useState(false);
   var TransactionTime = 1;
   var transactionAlias = "";
 
@@ -48,16 +49,66 @@ function ContentDashboard(props) {
       step: TransactionTime,
       alias: transactionAlias,
     };
-    console.log(datajson);
+    // const ml_datajson = {
+    //   step: TransactionTime.toString(),
+    //   amount: transactionAmount.toString(),
+    //   oldbalanceOrg: oldBalanceOrig.toString(),
+    //   oldbalanceDest: oldBalanceDest.toString(),
+    //   origBalance_inacc: (
+    //     oldBalanceOrig -
+    //     transactionAmount -
+    //     newBalanceOrig
+    //   ).toString(),
+    //   destBalance_inacc: (
+    //     oldBalanceDest +
+    //     transactionAmount -
+    //     newBalanceDest
+    //   ).toString(),
+    //   type_CASH_OUT: typeCashOut,
+    //   type_TRANSFER: typeTransfer,
+    // };
+    const ml_datajson_array = [
+      TransactionTime,
+      transactionAmount,
+      oldBalanceOrig,
+      oldBalanceDest,
+      oldBalanceOrig - transactionAmount - newBalanceOrig,
+      oldBalanceDest + transactionAmount - newBalanceDest,
+      typeCashOut,
+      typeTransfer,
+    ];
+
+    const test_array = [
+      [1, 1, 1, 1, 0, 1, false, true],
+      [1, 1, 1, 1, 0, 1, false, true],
+    ];
+    console.log("ml query jsondata, ", ml_datajson_array);
+    // console.log("Array ml query jsondata, ", ml_datajson_array);
+    // console.log(datajson);
+
+    const POST_ml_query = async (record) => {
+      const data = [record];
+      const res = await fetch("http://localhost:5000/ml_query", {
+        method: "POST",
+        body: JSON.stringify({ data: data }),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((res) => console.log(res));
+    };
+
     await fetch("http://localhost:8080/auth/saveQuery", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(datajson),
     })
-      .then((res) => res.text())
       .then((data) => console.log(data))
       .catch((err) => console.log(err.message));
-    console.log(queries);
+
+    POST_ml_query(ml_datajson_array);
+
+    // console.log(queries);
     setQueries(!queries);
 
     clearForm();
@@ -66,16 +117,16 @@ function ContentDashboard(props) {
   // (e) =>{(e)=>{if(e.currentTarget.value= 'transfer'){setTypeCashOut(0);setTypeTransfer(1)}}}
   const handleTransactionType = (e) => {
     if ((e.currentTarget.value = "transfer")) {
-      setTypeCashOut(0);
-      setTypeTransfer(1);
+      setTypeCashOut(false);
+      setTypeTransfer(true);
     } else {
-      setTypeCashOut(1);
-      setTypeTransfer(0);
+      setTypeCashOut(true);
+      setTypeTransfer(false);
     }
   };
   const handleTransactionTime = (e) => {
     TransactionTime = parseInt(e.currentTarget.value);
-    console.log(TransactionTime);
+    // console.log(TransactionTime);
   };
   return (
     <div className="flex justify-center container p-4 self-center">
