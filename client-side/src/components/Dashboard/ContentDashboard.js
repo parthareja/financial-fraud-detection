@@ -18,9 +18,10 @@ function ContentDashboard(props) {
   const [typeTransfer, setTypeTransfer] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [modalData, setModalData] = useState("default");
+  const [datajson, setDataJson] = useState("default");
 
-  const queries = props.queriesUpdate;
-  const setQueries = props.setQueriesUpdate;
+  const queriesUpdate = props.queriesUpdate;
+  const setQueriesUpdate = props.setQueriesUpdate;
   var resultData = "default";
 
   var oldBalanceOrig = 0;
@@ -30,6 +31,8 @@ function ContentDashboard(props) {
   var transactionAmount = 0;
   var TransactionTime = 1;
   var transactionAlias = "";
+
+  // var datajson;
 
   const { user, setUser } = useContext(TestContext);
 
@@ -41,7 +44,7 @@ function ContentDashboard(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // window.location.reload(false);
-    const datajson = {
+    setDataJson({
       user_id: user._id,
       amount: transactionAmount,
       oldbalanceOrg: oldBalanceOrig,
@@ -54,7 +57,7 @@ function ContentDashboard(props) {
       type_TRANSFER: typeTransfer,
       step: TransactionTime,
       alias: transactionAlias,
-    };
+    });
     const ml_datajson_array = [
       TransactionTime,
       transactionAmount,
@@ -66,7 +69,7 @@ function ContentDashboard(props) {
       typeTransfer,
     ];
 
-    console.log("ml query jsondata, ", ml_datajson_array); // console.log(datajson);
+    // console.log("ml query jsondata, ", ml_datajson_array); // console.log(datajson);
 
     const POST_ml_query = async (record) => {
       const data = [record];
@@ -84,19 +87,19 @@ function ContentDashboard(props) {
         });
     };
 
-    await fetch("http://localhost:8080/auth/saveQuery", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(datajson),
-      credentials: "include",
-    })
-      .then((data) => console.log(data))
-      .catch((err) => console.log(err.message));
+    // await fetch("http://localhost:8080/auth/saveQuery", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(datajson),
+    //   credentials: "include",
+    // })
+    //   .then((data) => console.log(data))
+    //   .catch((err) => console.log(err.message));
 
     POST_ml_query(ml_datajson_array);
 
     // console.log(queries);
-    setQueries(!queries);
+    setQueriesUpdate(!queriesUpdate);
 
     clearForm();
   };
@@ -119,6 +122,9 @@ function ContentDashboard(props) {
     <div className="flex justify-center container p-4 self-center">
       <div className="w-1/2 h-full ">
         <ResultModal
+          queriesUpdate={queriesUpdate}
+          setQueriesUpdate={setQueriesUpdate}
+          queryData={datajson}
           data={modalData}
           show={showResultModal}
           onHide={() => setShowResultModal(false)}

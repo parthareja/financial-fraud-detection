@@ -7,17 +7,10 @@ const ResultModal = (props) => {
   // const [reRender, setReRender] = useState(false);
   const [resultText, setResultText] = useState("default");
 
+  // Text display logic
   var bodyText = "default";
   var textColour = "green";
-  // useEffect(() => {
-  //   console.log("modal useEffect");
-  //   if (props.data == false) {
-  //     setResultText("This transaction is genuine");
-  //   } else {
-  //     setResultText("This transaction is FRAUDULENT");
-  //   }
-  //   // setReRender(!reRender);
-  // }, [props]);
+
   if (props.data == "false") {
     bodyText = "This transaction is genuine";
   } else {
@@ -26,9 +19,73 @@ const ResultModal = (props) => {
     textColour = "red";
   }
 
-  console.log("props data after effect, ", props.data);
-  console.log("Text after effect > ", bodyText);
-  // console.log("bodyData > ", bodyText);
+  // Save Query logic
+
+  const handleSave = async () => {
+    // e.preventDefault();
+    // window.location.reload(false);
+    // const datajson = {
+    //   user_id: user._id,
+    //   amount: transactionAmount,
+    //   oldbalanceOrg: oldBalanceOrig,
+    //   newbalanceOrg: newBalanceOrig,
+    //   origBalance_inacc: oldBalanceOrig - transactionAmount - newBalanceOrig,
+    //   oldbalanceDest: oldBalanceDest,
+    //   newbalanceDest: newBalanceDest,
+    //   destBalance_inacc: oldBalanceDest + transactionAmount - newBalanceDest,
+    //   type_CASH_OUT: typeCashOut,
+    //   type_TRANSFER: typeTransfer,
+    //   step: TransactionTime,
+    //   alias: transactionAlias,
+    // };
+    // const ml_datajson_array = [
+    //   TransactionTime,
+    //   transactionAmount,
+    //   oldBalanceOrig,
+    //   oldBalanceDest,
+    //   oldBalanceOrig - transactionAmount - newBalanceOrig,
+    //   oldBalanceDest + transactionAmount - newBalanceDest,
+    //   typeCashOut,
+    //   typeTransfer,
+    // ];
+
+    // console.log("ml query jsondata, ", ml_datajson_array); // console.log(datajson);
+
+    // const POST_ml_query = async (record) => {
+    //   const data = [record];
+    //   const res = await fetch("http://localhost:5000/ml_query", {
+    //     method: "POST",
+    //     body: JSON.stringify({ data: data }),
+    //     headers: { "Content-Type": "application/json" },
+    //     credentials: "include",
+    //   })
+    //     .then((res) => res.json())
+    //     .then((res) => {
+    //       setModalData(res[0]);
+    //       console.log("modalData ,", res[0]);
+    //       setShowResultModal(true);
+    //     });
+    // };
+    // console.log(props);
+    await fetch("http://localhost:8080/auth/saveQuery", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(props.queryData),
+      credentials: "include",
+    })
+      .then((data) => {
+        console.log(data);
+        props.onHide();
+        props.setQueries(!queries);
+      })
+      .catch((err) => console.log(err.message));
+
+    // POST_ml_query(ml_datajson_array);
+
+    // console.log(queries);
+
+    // clearForm();
+  };
 
   return (
     <>
@@ -48,7 +105,12 @@ const ResultModal = (props) => {
           {/* <p></p> */}
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.onHide}>Close</Button>
+          <Button variant="danger" onClick={props.onHide}>
+            Close
+          </Button>
+          <Button variant="success" onClick={handleSave}>
+            Save
+          </Button>
         </Modal.Footer>
       </Modal>
     </>
