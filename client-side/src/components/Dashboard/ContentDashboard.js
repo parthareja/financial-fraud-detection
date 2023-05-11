@@ -18,7 +18,7 @@ function ContentDashboard(props) {
   const [typeTransfer, setTypeTransfer] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [modalData, setModalData] = useState("default");
-  const [datajson, setDataJson] = useState("default");
+  const [datajson, setDataJson] = useState({});
 
   const queriesUpdate = props.queriesUpdate;
   const setQueriesUpdate = props.setQueriesUpdate;
@@ -125,7 +125,7 @@ function ContentDashboard(props) {
           queriesUpdate={queriesUpdate}
           setQueriesUpdate={setQueriesUpdate}
           queryData={datajson}
-          data={modalData}
+          result={modalData}
           show={showResultModal}
           onHide={() => setShowResultModal(false)}
           showResultState={{ showResultModal, setShowResultModal }}

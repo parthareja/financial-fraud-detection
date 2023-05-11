@@ -1,20 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+// import { useEffect } from "react";
+
 import Button from "react-bootstrap/Button";
+import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
-import { useEffect } from "react";
 
 const ResultModal = (props) => {
   // const [reRender, setReRender] = useState(false);
+  var queryDataWithResult = props.queryData;
+
+  useEffect(() => {
+    queryDataWithResult = props.queryData;
+    queryDataWithResult["ml_classification"] = props.result;
+  }, [props.queryData]);
   const [resultText, setResultText] = useState("default");
 
   // Text display logic
   var bodyText = "default";
   var textColour = "green";
 
-  if (props.data == "false") {
+  if (props.result == "false") {
     bodyText = "This transaction is genuine";
   } else {
-    console.log("result to declare FRAUDULENT", props.data);
+    console.log("result to declare FRAUDULENT", props.result);
     bodyText = "This transaction is FRAUDULENT";
     textColour = "red";
   }
@@ -22,61 +30,17 @@ const ResultModal = (props) => {
   // Save Query logic
 
   const handleSave = async () => {
-    // e.preventDefault();
-    // window.location.reload(false);
-    // const datajson = {
-    //   user_id: user._id,
-    //   amount: transactionAmount,
-    //   oldbalanceOrg: oldBalanceOrig,
-    //   newbalanceOrg: newBalanceOrig,
-    //   origBalance_inacc: oldBalanceOrig - transactionAmount - newBalanceOrig,
-    //   oldbalanceDest: oldBalanceDest,
-    //   newbalanceDest: newBalanceDest,
-    //   destBalance_inacc: oldBalanceDest + transactionAmount - newBalanceDest,
-    //   type_CASH_OUT: typeCashOut,
-    //   type_TRANSFER: typeTransfer,
-    //   step: TransactionTime,
-    //   alias: transactionAlias,
-    // };
-    // const ml_datajson_array = [
-    //   TransactionTime,
-    //   transactionAmount,
-    //   oldBalanceOrig,
-    //   oldBalanceDest,
-    //   oldBalanceOrig - transactionAmount - newBalanceOrig,
-    //   oldBalanceDest + transactionAmount - newBalanceDest,
-    //   typeCashOut,
-    //   typeTransfer,
-    // ];
-
-    // console.log("ml query jsondata, ", ml_datajson_array); // console.log(datajson);
-
-    // const POST_ml_query = async (record) => {
-    //   const data = [record];
-    //   const res = await fetch("http://localhost:5000/ml_query", {
-    //     method: "POST",
-    //     body: JSON.stringify({ data: data }),
-    //     headers: { "Content-Type": "application/json" },
-    //     credentials: "include",
-    //   })
-    //     .then((res) => res.json())
-    //     .then((res) => {
-    //       setModalData(res[0]);
-    //       console.log("modalData ,", res[0]);
-    //       setShowResultModal(true);
-    //     });
-    // };
-    // console.log(props);
     await fetch("http://localhost:8080/auth/saveQuery", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(props.queryData),
+      body: JSON.stringify(queryDataWithResult),
       credentials: "include",
     })
       .then((data) => {
         console.log(data);
+        console.log(props);
         props.onHide();
-        props.setQueries(!queries);
+        props.setQueriesUpdate(!props.queriesUpdate);
       })
       .catch((err) => console.log(err.message));
 
@@ -102,7 +66,64 @@ const ResultModal = (props) => {
         </Modal.Header>
         <Modal.Body>
           <h4 style={{ color: textColour }}>{bodyText}</h4>
-          {/* <p></p> */}
+
+          <div className="flex container justify-center ">
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  {/* <th>#</th> */}
+                  <th>Property</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Alias</td>
+                  <td>{props.queryData.alias}</td>
+                </tr>
+                <tr>
+                  <td>Amount</td>
+                  <td>{props.queryData.amount}</td>
+                </tr>
+                <tr>
+                  <td>Old Origin Balance</td>
+                  <td>{props.queryData.oldbalanceOrg}</td>
+                </tr>
+                <tr>
+                  <td>New Origin Balance</td>
+                  <td>{props.queryData.newbalanceOrg}</td>
+                </tr>
+                <tr>
+                  <td>Old Destination Balance</td>
+                  <td>{props.queryData.oldbalanceDest}</td>
+                </tr>
+                <tr>
+                  <td>New Destination Balance</td>
+                  <td>{props.queryData.newbalanceOrg}</td>
+                </tr>
+                {props.queryData.type_CASH_OUT && (
+                  <tr>
+                    <td>Transaction Type</td>
+                    <td>Cash-out</td>
+                  </tr>
+                )}
+                {props.queryData.type_TRANSFER && (
+                  <tr>
+                    <td>Transaction Type</td>
+                    <td>Transfer</td>
+                  </tr>
+                )}
+                <tr>
+                  <td>Time Of Transaction</td>
+                  <td>{props.time}</td>
+                </tr>
+                <tr>
+                  <td>Transaction classified as</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </Table>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={props.onHide}>

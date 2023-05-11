@@ -185,6 +185,26 @@ function UserTransactionModal(props) {
     props.setTime(strtime);
   };
   handleTimeStep();
+  // console.log(
+  //   "props ml_classification type > ",
+  //   typeof props.data.ml_classification
+  // );
+
+  const handleClassificationText = (bool) => {
+    if (bool) {
+      return "Fraudulent";
+    } else {
+      return "Genuine";
+    }
+  };
+  const handleClassificationColour = (bool) => {
+    if (bool) {
+      return "RGBA(250, 160, 160, 0.65)";
+    } else {
+      return "RGBA(213, 255, 221, 1)";
+    }
+  };
+
   return (
     <>
       <Modal
@@ -258,7 +278,15 @@ function UserTransactionModal(props) {
                 </tr>
                 <tr>
                   <td>Transaction classified as</td>
-                  <td></td>
+                  <td
+                    style={{
+                      backgroundColor: handleClassificationColour(
+                        props.data.ml_classification
+                      ),
+                    }}
+                  >
+                    {handleClassificationText(props.data.ml_classification)}
+                  </td>
                 </tr>
               </tbody>
             </Table>
