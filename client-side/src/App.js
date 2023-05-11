@@ -4,7 +4,7 @@ import { Route, Routes, Link } from "react-router-dom";
 import React, { useDebugValue, useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css"
+import "./App.css";
 
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
@@ -64,9 +64,9 @@ function App() {
     // defaultLogin(user, setUser);
   }, []);
   const bruh = JSON.stringify(backendData);
-  console.log("App bruh backendData");
+  // console.log("App bruh backendData");
   // console.log(user);
-  console.log(bruh);
+  // console.log(bruh);
 
   // setBackendData({ users: ["chamar"] });
 

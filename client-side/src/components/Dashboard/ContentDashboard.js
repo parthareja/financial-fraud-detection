@@ -69,10 +69,11 @@ function ContentDashboard(props) {
       typeTransfer,
     ];
 
-    // console.log("ml query jsondata, ", ml_datajson_array); // console.log(datajson);
-
+    console.log("datajson collection, ", datajson);
+    console.log("ml query data collection, ", ml_datajson_array); // console.log(datajson);
     const POST_ml_query = async (record) => {
       const data = [record];
+      console.log("ml query data in POST", data);
       const res = await fetch("http://localhost:5000/ml_query", {
         method: "POST",
         body: JSON.stringify({ data: data }),
@@ -257,7 +258,7 @@ function ContentDashboard(props) {
             </Form.Group>
           </Row>
 
-          <Form.Group className="mb-3" controlId="formTransactionAlias">
+          {/* <Form.Group className="mb-3" controlId="formTransactionAlias">
             <Form.Label>Enter Alias</Form.Label>
             <Form.Control
               placeholder="Enter an alias for this query (ex: JHN-09-02-03)"
@@ -266,7 +267,7 @@ function ContentDashboard(props) {
                 transactionAlias = e.target.value;
               }}
             />
-          </Form.Group>
+          </Form.Group> */}
           {/* <div className='flex justify-center container bg-orange-200'>
                         <Row className="mb-3 flex flex-col">
                             <div className='flex'>

@@ -60,9 +60,9 @@ function SideBar(props) {
             item.type_CASH_OUT = false;
           }
         });
-        setAllUserTransaction(data);
-        console.log(allUserTransactions);
+        setAllUserTransaction(data.reverse());
         // console.log(data);
+        // console.log(allUserTransactions);
       })
       .catch((err) => console.log(err));
   }, [queries]);

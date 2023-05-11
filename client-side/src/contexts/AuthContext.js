@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
       //     setUser(data.user);
       //   }
 
-      console.log("Inside defaultLogin", user);
+      // console.log("Inside defaultLogin", user);
       // setUser(undefined);
 
       const temp = await axios.get(
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
       );
 
       var authorized = temp.data;
-      console.log(authorized);
+      // console.log(authorized);
 
       // setUser("this doesn't work");
       // console.log(user);
@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
         setUser(false);
       } else {
         setUser(authorized);
-        console.log(user);
+        // console.log(user);
       }
     } catch (er) {
       return er;
