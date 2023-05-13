@@ -3,19 +3,27 @@ from flask import Flask, jsonify, request as req
 import pickle
 import sklearn
 import os
+from dotenv import dotenv_values
 
 import pandas as pd
 import flask_cors
 
-model_file_path = os.getcwd() + "\\rf_model_financial_fraud_detection.pkl"
+
+config = dotenv_values("server-side/.env")
+# print("config", config)
+# model_file_path = os.getcwd() + "\\rf_model_financial_fraud_detection.pkl"
 
 app = Flask(__name__)
-flask_cors.CORS(app, origins=["http://localhost:8080", "http://localhost:3000"], supports_credentials=True)
+flask_cors.CORS(
+    app,
+    origins=["http://localhost:8080", "http://localhost:3000"],
+    supports_credentials=True,
+)
 
 # flask_cors.cross_origin()
 
 model_file = open(
-    model_file_path,
+    config["MODEL_FILE_PATH"],
     "rb",
 )
 model = pickle.load(model_file)
@@ -35,7 +43,6 @@ def index():
 @app.route("/ml_query", methods=["POST"])
 # @cross_origin()
 def predict():
-    
     # try:
     prediction = "default"
     print(req.data)
@@ -63,7 +70,7 @@ def predict():
         "origBalance_inacc",
         "destBalance_inacc",
         "type_CASH_OUT",
-        "type_TRANSFER"
+        "type_TRANSFER",
     ]
     display(df)
     prediction = model.predict(df)
@@ -74,8 +81,7 @@ def predict():
 
     # except Exception as e:
     #     print(e)
-        
-    
+
     return result
     # return jsonify({"result": list(prediction)})
 
