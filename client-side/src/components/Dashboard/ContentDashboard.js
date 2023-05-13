@@ -39,27 +39,24 @@ function ContentDashboard(props) {
   var transactionAmount = useRef(0);
   var TransactionTime = useRef(1);
 
-  // const resetFields = () => {
-  //   datajson.current = {};
+  const resetFields = () => {
+    // datajson.current = {};
 
-  //   resultData.current = "default";
+    // resultData.current = "default";
 
-  //   modalData.current = "default";
+    // modalData.current = "default";
 
-  //   typeCashOut.current = true;
-  //   typeTransfer.current = false;
+    typeCashOut.current = true;
+    typeTransfer.current = false;
 
-  //   oldBalanceOrig.current = 0;
-  //   newBalanceOrig.current = 0;
-  //   oldBalanceDest.current = 0;
-  //   newBalanceDest.current = 0;
-  //   transactionAmount.current = 0;
-  //   TransactionTime.current = 1;
-
-  //   typeCashOut.current = true;
-  //   typeTransfer.current = false;
-  //   console.log("reset, amount > ", transactionAmount.current);
-  // };
+    oldBalanceOrig.current = 0;
+    newBalanceOrig.current = 0;
+    oldBalanceDest.current = 0;
+    newBalanceDest.current = 0;
+    transactionAmount.current = 0;
+    TransactionTime.current = 1;
+    console.log("reset, amount > ", transactionAmount.current);
+  };
   // resetFields();
 
   // var datajson = {};
@@ -73,6 +70,7 @@ function ContentDashboard(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // console.log("on submit entry amount value > ", transactionAmount.current);
     datajson.current = {
       user_id: user._id,
       amount: transactionAmount.current,
@@ -143,8 +141,7 @@ function ContentDashboard(props) {
 
     POST_ml_query(ml_datajson_array);
 
-    // resetFields();
-    // console.log(queries);
+    resetFields();
     setQueriesUpdate(!queriesUpdate);
 
     clearForm();
