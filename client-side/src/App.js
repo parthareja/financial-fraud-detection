@@ -1,8 +1,9 @@
-import logo from "./logo.svg";
-import "./App.css";
 import { Route, Routes, Link } from "react-router-dom";
 import React, { useDebugValue, useEffect, useState, useMemo } from "react";
+
 import axios from "axios";
+import { gapi } from "gapi-script";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -11,6 +12,7 @@ import SignIn from "./components/SignIn";
 import AuthApi from "./utils/AuthApi";
 import DashBoard from "./components/Dashboard/DashBoard";
 import TestDev from "./components/TestDev";
+import GLoginPage from "./components/pages/GLoginPage";
 
 import { UserProvider } from "./contexts/UserContext";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -30,38 +32,9 @@ function App() {
   // console.log("Outside useEffect", user);
   // setUser(undefined);
   useEffect(() => {
-    // console.log("Inside useEffect", user);
-    // setUser(undefined);
-    const fetchData = async () => {
-      await fetch("/api")
-        .then((response) => response.json())
-        .then((data) => setBackendData(data));
-    };
-
-    // fetchData();
-
-    // const defaultLogin = async (user, setUser) => {
-    //   console.log("Inside defaultLogin", user);
-    //   // setUser(undefined);
-
-    //   const temp = await axios("http://localhost:8080/auth/jwtGetUser", {
-    //     withCredentials: true,
-    //   });
-
-    //   var authorized = temp.data;
-    //   // .then((res) => {
-    //   //   console.log("axios res", res);
-    //   // });
-    //   // console.log("axios res", temp.data);
-    //   // console.log(user);
-    //   // console.log(authorized.body);
-    //   if (authorized === false) {
-    //     setUser(undefined);
-    //   } else {
-    //     setUser(authorized);
-    //   }
-    // };
-    // defaultLogin(user, setUser);
+    function start() {
+      gapi.client.init({ clientId: clientId, scope: "" });
+    }
   }, []);
   const bruh = JSON.stringify(backendData);
   // console.log("App bruh backendData");
@@ -78,6 +51,7 @@ function App() {
           <Routes>
             {/* <Route path="/" element={<App />} /> */}
             {/* <Route path="/" element={<SignUp />} /> */}
+            <Route path="/glogin" element={<GLoginPage />} />
             <Route path="/dashboard" element={<DashBoard />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
