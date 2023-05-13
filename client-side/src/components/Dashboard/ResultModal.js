@@ -70,10 +70,10 @@ const ResultModal = (props) => {
   handleTransactionType();
 
   if (props.result.current == "false") {
-    bodyText = "This transaction is genuine";
+    bodyText = "This transaction is genuine.";
   } else {
     // console.log("result to declare FRAUDULENT", props.result);
-    bodyText = "This transaction is FRAUDULENT";
+    bodyText = "This transaction is FRAUDULENT!";
     textColour = "red";
   }
 
