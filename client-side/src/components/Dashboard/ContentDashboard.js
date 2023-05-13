@@ -74,7 +74,7 @@ function ContentDashboard(props) {
     const POST_ml_query = async (record) => {
       const data = [record];
       console.log("ml query data in POST", data);
-      const res = await fetch("http://localhost:5000/ml_query", {
+      const res = await fetch("http://127.0.0.1:5000/ml_query", {
         method: "POST",
         body: JSON.stringify({ data: data }),
         headers: { "Content-Type": "application/json" },
