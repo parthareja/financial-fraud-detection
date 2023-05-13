@@ -205,3 +205,20 @@ export const userTransactions = async (req, res) => {
 //   let errors = {user_id : "", alias: "",step:"",amount:"",oldbalanceOrg:"",oldbalanceDest:"",origBalance_inacc:"",destBalance_inacc:"",type_CASH_OUT:"",type_TRANSFER:""}
 
 // }
+
+// app.delete("/delete/:id",async(req,res)=>{
+//   const {id} = req.params
+//   await users.deleteOne({_id:id})
+//   res.send("delt successfully")
+// })
+
+export const deleteUserTransaction = async (req, res) => {
+  try {
+    const { transac_id } = req.params
+    await QueryData.deleteOne({ _id: transac_id })
+    res.send("Successfully deleted user transaction")
+  }
+  catch (err) {
+    res.send({ msg: err })
+  }
+} 

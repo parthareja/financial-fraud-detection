@@ -2,8 +2,12 @@ from IPython.display import display
 from flask import Flask, jsonify, request as req
 import pickle
 import sklearn
+import os
+
 import pandas as pd
 import flask_cors
+
+model_file_path = os.getcwd() + "\\rf_model_financial_fraud_detection.pkl"
 
 app = Flask(__name__)
 flask_cors.CORS(app, origins=["http://localhost:8080", "http://localhost:3000"], supports_credentials=True)
@@ -11,7 +15,7 @@ flask_cors.CORS(app, origins=["http://localhost:8080", "http://localhost:3000"],
 # flask_cors.cross_origin()
 
 model_file = open(
-    r"D:\Coding\Projects\University\Capstone\financial-fraud-detection\rf_model_financial_fraud_detection.pkl",
+    model_file_path,
     "rb",
 )
 model = pickle.load(model_file)

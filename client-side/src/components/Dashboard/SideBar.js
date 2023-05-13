@@ -85,6 +85,8 @@ function SideBar(props) {
           data={modalData}
           show={modalShow}
           onHide={() => setModalShow(false)}
+          queriesUpdate = {queries}
+          setQueriesUpdate = {setQueries}
         />
         {allUserTransactions.map((item) => (
           <div>
@@ -190,6 +192,16 @@ function UserTransactionModal(props) {
   //   typeof props.data.ml_classification
   // );
 
+  const deleteTransaction = async () => {
+    const trans_id = props.data._id
+    await fetch(`http://localhost:8080/auth/deleteUserTransaction/${trans_id}`, { method: 'DELETE' })
+    .then((res)=>res.text())
+    .then((data)=>console.log(data))
+    .catch((err)=>console.log(err.message))
+    props.setQueriesUpdate(!props.queriesUpdate)
+    props.onHide()
+  }
+
   const handleClassificationText = (bool) => {
     if (bool) {
       return "Fraudulent";
@@ -294,7 +306,7 @@ function UserTransactionModal(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>
-          <Button variant="danger">Delete</Button>
+          <Button onClick={deleteTransaction}  variant="danger">Delete</Button>
         </Modal.Footer>
       </Modal>
     </>

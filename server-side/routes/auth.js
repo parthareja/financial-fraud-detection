@@ -6,6 +6,7 @@ import {
   defaultLoginJWTGetUser,
   saveQuery,
   userTransactions,
+  deleteUserTransaction,
 } from "./../controllers/auth.js";
 import { verifyToken } from "./../middleware/auth.js";
 
@@ -19,7 +20,7 @@ router.get("/test", verifyToken, verifyToken);
 router.get("/defaultLoginJWTGetUser", verifyToken, defaultLoginJWTGetUser);
 router.post("/saveQuery", verifyToken, saveQuery);
 router.get("/userTransactions/:user_id", verifyToken, userTransactions);
-
+router.delete("/deleteUserTransaction/:transac_id",deleteUserTransaction);
 // router.get("/authTemp", verifyToken, authTemp)
 
 export default router;
