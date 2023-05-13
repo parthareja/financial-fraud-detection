@@ -1,5 +1,5 @@
 import axios from "axios";
-import { React, useContext } from "react";
+import { React, useContext, useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -14,25 +14,55 @@ import ResultModal from "./ResultModal.js";
 import { TestContext } from "../../contexts/TestContext";
 
 function ContentDashboard(props) {
-  const [typeCashOut, setTypeCashOut] = useState(true);
-  const [typeTransfer, setTypeTransfer] = useState(false);
+  // const [typeCashOut, setTypeCashOut] = useState(true);
+  // const [typeTransfer, setTypeTransfer] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
-  const [modalData, setModalData] = useState("default");
-  const [datajson, setDataJson] = useState({});
+  // const [modalData, setModalData] = useState("default");
+  // const [datajson, setDataJson] = useState({});
 
   const queriesUpdate = props.queriesUpdate;
   const setQueriesUpdate = props.setQueriesUpdate;
-  var resultData = "default";
 
-  var oldBalanceOrig = 0;
-  var newBalanceOrig = 0;
-  var oldBalanceDest = 0;
-  var newBalanceDest = 0;
-  var transactionAmount = 0;
-  var TransactionTime = 1;
-  var transactionAlias = "";
+  var datajson = useRef({});
 
-  // var datajson;
+  var resultData = useRef("default");
+
+  var modalData = useRef("default");
+
+  var typeCashOut = useRef(true);
+  var typeTransfer = useRef(false);
+
+  var oldBalanceOrig = useRef(0);
+  var newBalanceOrig = useRef(0);
+  var oldBalanceDest = useRef(0);
+  var newBalanceDest = useRef(0);
+  var transactionAmount = useRef(0);
+  var TransactionTime = useRef(1);
+
+  // const resetFields = () => {
+  //   datajson.current = {};
+
+  //   resultData.current = "default";
+
+  //   modalData.current = "default";
+
+  //   typeCashOut.current = true;
+  //   typeTransfer.current = false;
+
+  //   oldBalanceOrig.current = 0;
+  //   newBalanceOrig.current = 0;
+  //   oldBalanceDest.current = 0;
+  //   newBalanceDest.current = 0;
+  //   transactionAmount.current = 0;
+  //   TransactionTime.current = 1;
+
+  //   typeCashOut.current = true;
+  //   typeTransfer.current = false;
+  //   console.log("reset, amount > ", transactionAmount.current);
+  // };
+  // resetFields();
+
+  // var datajson = {};
 
   const { user, setUser } = useContext(TestContext);
 
@@ -43,37 +73,60 @@ function ContentDashboard(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // window.location.reload(false);
-    setDataJson({
+    datajson.current = {
       user_id: user._id,
-      amount: transactionAmount,
-      oldbalanceOrg: oldBalanceOrig,
-      newbalanceOrg: newBalanceOrig,
-      origBalance_inacc: oldBalanceOrig - transactionAmount - newBalanceOrig,
-      oldbalanceDest: oldBalanceDest,
-      newbalanceDest: newBalanceDest,
-      destBalance_inacc: oldBalanceDest + transactionAmount - newBalanceDest,
-      type_CASH_OUT: typeCashOut,
-      type_TRANSFER: typeTransfer,
-      step: TransactionTime,
-      alias: transactionAlias,
-    });
+      amount: transactionAmount.current,
+      oldbalanceOrg: oldBalanceOrig.current,
+      newbalanceOrg: newBalanceOrig.current,
+      origBalance_inacc:
+        oldBalanceOrig.current -
+        transactionAmount.current -
+        newBalanceOrig.current,
+      oldbalanceDest: oldBalanceDest.current,
+      newbalanceDest: newBalanceDest.current,
+      destBalance_inacc:
+        oldBalanceDest.current +
+        transactionAmount.current -
+        newBalanceDest.current,
+      type_CASH_OUT: typeCashOut.current,
+      type_TRANSFER: typeTransfer.current,
+      step: TransactionTime.current,
+    };
+
+    // setDataJson({
+    //   user_id: user._id,
+    //   amount: transactionAmount,
+    //   oldbalanceOrg: oldBalanceOrig,
+    //   newbalanceOrg: newBalanceOrig,
+    //   origBalance_inacc: oldBalanceOrig - transactionAmount - newBalanceOrig,
+    //   oldbalanceDest: oldBalanceDest,
+    //   newbalanceDest: newBalanceDest,
+    //   destBalance_inacc: oldBalanceDest + transactionAmount - newBalanceDest,
+    //   type_CASH_OUT: typeCashOut,
+    //   type_TRANSFER: typeTransfer,
+    //   step: TransactionTime,
+    //   alias: transactionAlias,
+    // });
     const ml_datajson_array = [
-      TransactionTime,
-      transactionAmount,
-      oldBalanceOrig,
-      oldBalanceDest,
-      oldBalanceOrig - transactionAmount - newBalanceOrig,
-      oldBalanceDest + transactionAmount - newBalanceDest,
-      typeCashOut,
-      typeTransfer,
+      TransactionTime.current,
+      transactionAmount.current,
+      oldBalanceOrig.current,
+      oldBalanceDest.current,
+      oldBalanceOrig.current -
+        transactionAmount.current -
+        newBalanceOrig.current,
+      oldBalanceDest.current +
+        transactionAmount.current -
+        newBalanceDest.current,
+      typeCashOut.current,
+      typeTransfer.current,
     ];
 
-    console.log("datajson collection, ", datajson);
-    console.log("ml query data collection, ", ml_datajson_array); // console.log(datajson);
+    // console.log("datajson collection, ", datajson);
+    // console.log("ml query data collection, ", ml_datajson_array); // console.log(datajson);
     const POST_ml_query = async (record) => {
       const data = [record];
-      console.log("ml query data in POST", data);
+      // console.log("ml query data in POST", data);
       const res = await fetch("http://localhost:5000/ml_query", {
         method: "POST",
         body: JSON.stringify({ data: data }),
@@ -82,23 +135,15 @@ function ContentDashboard(props) {
       })
         .then((res) => res.json())
         .then((res) => {
-          setModalData(res[0]);
-          console.log("modalData ,", res[0]);
+          modalData.current = res[0];
+          // console.log("modalData ,", res[0]);
           setShowResultModal(true);
         });
     };
 
-    // await fetch("http://localhost:8080/auth/saveQuery", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(datajson),
-    //   credentials: "include",
-    // })
-    //   .then((data) => console.log(data))
-    //   .catch((err) => console.log(err.message));
-
     POST_ml_query(ml_datajson_array);
 
+    // resetFields();
     // console.log(queries);
     setQueriesUpdate(!queriesUpdate);
 
@@ -107,30 +152,32 @@ function ContentDashboard(props) {
 
   // (e) =>{(e)=>{if(e.currentTarget.value= 'transfer'){setTypeCashOut(0);setTypeTransfer(1)}}}
   const handleTransactionType = (e) => {
-    if ((e.currentTarget.value = "transfer")) {
-      setTypeCashOut(false);
-      setTypeTransfer(true);
+    if (e.currentTarget.value == "transfer") {
+      typeTransfer.current = true;
+      typeCashOut.current = false;
     } else {
-      setTypeCashOut(true);
-      setTypeTransfer(false);
+      typeCashOut.current = true;
+      typeTransfer.current = false;
     }
   };
   const handleTransactionTime = (e) => {
-    TransactionTime = parseInt(e.currentTarget.value);
+    TransactionTime.current = parseInt(e.currentTarget.value);
     // console.log(TransactionTime);
   };
   return (
     <div className="flex justify-center container p-4 self-center">
       <div className="w-1/2 h-full ">
-        <ResultModal
-          queriesUpdate={queriesUpdate}
-          setQueriesUpdate={setQueriesUpdate}
-          queryData={datajson}
-          result={modalData}
-          show={showResultModal}
-          onHide={() => setShowResultModal(false)}
-          showResultState={{ showResultModal, setShowResultModal }}
-        />
+        {showResultModal && (
+          <ResultModal
+            queriesUpdate={queriesUpdate}
+            setQueriesUpdate={setQueriesUpdate}
+            queryData={datajson}
+            result={modalData}
+            show={showResultModal}
+            onHide={() => setShowResultModal(false)}
+            showResultState={{ showResultModal, setShowResultModal }}
+          />
+        )}
         <Form onSubmit={handleSubmit} id="mainForm">
           <Row className="mb-3">
             <Form.Group as={Col} controlId="formOldBalanceOrig">
@@ -141,7 +188,7 @@ function ContentDashboard(props) {
                   placeholder="Enter amount "
                   autoComplete="off"
                   onChange={(e) => {
-                    oldBalanceOrig = parseInt(e.target.value);
+                    oldBalanceOrig.current = parseInt(e.target.value);
                   }}
                 />
               </InputGroup>
@@ -155,7 +202,7 @@ function ContentDashboard(props) {
                   placeholder="Enter amount "
                   autoComplete="off"
                   onChange={(e) => {
-                    newBalanceOrig = parseInt(e.target.value);
+                    newBalanceOrig.current = parseInt(e.target.value);
                   }}
                 />
               </InputGroup>
@@ -170,7 +217,7 @@ function ContentDashboard(props) {
                   placeholder="Enter amount "
                   autoComplete="off"
                   onChange={(e) => {
-                    oldBalanceDest = parseInt(e.target.value);
+                    oldBalanceDest.current = parseInt(e.target.value);
                   }}
                 />
               </InputGroup>
@@ -184,7 +231,11 @@ function ContentDashboard(props) {
                   placeholder="Enter amount "
                   autoComplete="off"
                   onChange={(e) => {
-                    newBalanceDest = parseInt(e.target.value);
+                    newBalanceDest.current = parseInt(e.target.value);
+                    // console.log(
+                    //   "newBalanceDest.current > ",
+                    //   newBalanceDest.current
+                    // );
                   }}
                 />
               </InputGroup>
@@ -199,7 +250,7 @@ function ContentDashboard(props) {
                   placeholder="Enter amount "
                   autoComplete="off"
                   onChange={(e) => {
-                    transactionAmount = parseInt(e.target.value);
+                    transactionAmount.current = parseInt(e.target.value);
                   }}
                 />
               </InputGroup>
