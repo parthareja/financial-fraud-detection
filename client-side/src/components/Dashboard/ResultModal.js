@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 // import { useEffect } from "react";
 
 import Button from "react-bootstrap/Button";
@@ -6,12 +6,21 @@ import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 
 const ResultModal = (props) => {
-  // const [reRender, setReRender] = useState(false);
-  var queryDataWithResult = props.queryData;
-  queryDataWithResult["ml_classification"] = props.result;
+  const [reRender, setReRender] = useState(false);
+  // console.log(props.queryData);
+  // var queryDataWithResult = useRef(props.queryData.current);
+  // queryDataWithResult.current["ml_classification"] = props.result.current;
+  // console.log(queryDataWithResult.current);
+  var queryDataWithResult = useRef("default");
+  queryDataWithResult.current = props.queryData.current;
+  queryDataWithResult.current["ml_classification"] = props.result.current;
 
   useEffect(() => {
-    queryDataWithResult = props.queryData;
+    queryDataWithResult.current = props.queryData.current;
+    queryDataWithResult.current["ml_classification"] = props.result.current;
+    console.log(queryDataWithResult.current);
+    setReRender(!reRender);
+    console.log("reRendered");
   }, [props.queryData]);
 
   const [resultText, setResultText] = useState("default");
@@ -25,9 +34,8 @@ const ResultModal = (props) => {
   var displayTime = 0;
 
   const handleTimeStep = () => {
-    var step = props.queryData.step - 1;
+    var step = queryDataWithResult.current.step - 1;
     let strtime;
-    console.log;
     if (step == 12) {
       strtime = step + ":00 PM";
     } else if (step == 0) {
@@ -39,6 +47,8 @@ const ResultModal = (props) => {
       strtime = step + ":00 PM";
     }
     displayTime = strtime;
+    // console.log(queryDataWithResult.step);
+    // console.log("displayTime >  ", displayTime);
   };
   handleTimeStep();
 
@@ -47,18 +57,19 @@ const ResultModal = (props) => {
   var showTransfer = false;
 
   const handleTransactionType = () => {
-    if (props.queryData.type_TRANSFER) {
+    if (queryDataWithResult.current.type_TRANSFER) {
       showTransfer = true;
       showCashOut = false;
     } else {
       showCashOut = true;
       showTransfer = false;
+      // console.log(queryDataWithResult.type_Ca);
     }
   };
   // console.log(showCashOut, showTransfer);
   handleTransactionType();
 
-  if (props.result == "false") {
+  if (props.result.current == "false") {
     bodyText = "This transaction is genuine";
   } else {
     // console.log("result to declare FRAUDULENT", props.result);
@@ -87,12 +98,12 @@ const ResultModal = (props) => {
 
   const handleSave = async () => {
     console.log("saving");
-    console.log(props.queryData);
+    // console.log(props.queryData);
     console.log(queryDataWithResult);
     await fetch("http://localhost:8080/auth/saveQuery", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(queryDataWithResult),
+      body: JSON.stringify(queryDataWithResult.current),
       credentials: "include",
     })
       .then((data) => {
@@ -143,23 +154,27 @@ const ResultModal = (props) => {
                   </tr> */}
                   <tr>
                     <td>Amount</td>
-                    <td>{props.queryData.amount}</td>
+                    <td>{queryDataWithResult.current.amount}</td>
                   </tr>
+                  {/* <tr>
+                    <td>Amount</td>
+                    <td>{queryDataWithResult.amount}</td>
+                  </tr> */}
                   <tr>
                     <td>Old Origin Balance</td>
-                    <td>{props.queryData.oldbalanceOrg}</td>
+                    <td>{queryDataWithResult.current.oldbalanceOrg}</td>
                   </tr>
                   <tr>
                     <td>New Origin Balance</td>
-                    <td>{props.queryData.newbalanceOrg}</td>
+                    <td>{queryDataWithResult.current.newbalanceOrg}</td>
                   </tr>
                   <tr>
                     <td>Old Destination Balance</td>
-                    <td>{props.queryData.oldbalanceDest}</td>
+                    <td>{queryDataWithResult.current.oldbalanceDest}</td>
                   </tr>
                   <tr>
                     <td>New Destination Balance</td>
-                    <td>{props.queryData.newbalanceOrg}</td>
+                    <td>{queryDataWithResult.current.newbalanceDest}</td>
                   </tr>
                   {showCashOut && (
                     <tr>
@@ -201,7 +216,7 @@ const ResultModal = (props) => {
                 id="aliasName"
                 placeholder="Enter an alias for this query (ex: JHN-09-02-03)"
                 onChange={(e) => {
-                  queryDataWithResult["alias"] = e.target.value;
+                  queryDataWithResult.current["alias"] = e.target.value;
                 }}
               />
             </div>
