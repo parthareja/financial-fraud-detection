@@ -37,6 +37,7 @@ function SideBar(props) {
   // const { user, setUser } = useContext(TestContext);
 
   const UserContext = useContext(TestContext);
+  // console.log(UserContext);
   const sidebarItemsClasses =
     "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 rounded-sm text-base";
   const [allUserTransactions, setAllUserTransaction] = useState([]);
@@ -85,8 +86,8 @@ function SideBar(props) {
           data={modalData}
           show={modalShow}
           onHide={() => setModalShow(false)}
-          queriesUpdate = {queries}
-          setQueriesUpdate = {setQueries}
+          queriesUpdate={queries}
+          setQueriesUpdate={setQueries}
         />
         {allUserTransactions.map((item) => (
           <div>
@@ -106,11 +107,9 @@ function SideBar(props) {
 
       <div className=" gap-0.5 pt-2 border-t border-neutral-700">
         <div className="flex items-center gap-2 px-3 py-2 text-neutral-400">
-          <BsFillPersonFill fontSize={20} />
-          <span>
-            {" "}
-            {UserContext.user.firstName} {UserContext.user.lastName}
-          </span>
+          {/* <BsFillPersonFill fontSize={20} /> */}
+          <img width="20" height="20" src={UserContext.user.picture}></img>
+          <span> {UserContext.user.name}</span>
         </div>
         <div
           onClick={props.handleLogout}
@@ -128,7 +127,7 @@ function SideBar(props) {
 
 function SideBarItems({ item, setModalShow, setModalData }) {
   const handleClick = (item) => {
-    console.log(item);
+    // console.log(item);
     setModalData(item);
     setModalShow(true);
   };
@@ -193,14 +192,17 @@ function UserTransactionModal(props) {
   // );
 
   const deleteTransaction = async () => {
-    const trans_id = props.data._id
-    await fetch(`http://localhost:8080/auth/deleteUserTransaction/${trans_id}`, { method: 'DELETE' })
-    .then((res)=>res.text())
-    .then((data)=>console.log(data))
-    .catch((err)=>console.log(err.message))
-    props.setQueriesUpdate(!props.queriesUpdate)
-    props.onHide()
-  }
+    const trans_id = props.data._id;
+    await fetch(
+      `http://localhost:8080/auth/deleteUserTransaction/${trans_id}`,
+      { method: "DELETE" }
+    )
+      .then((res) => res.text())
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err.message));
+    props.setQueriesUpdate(!props.queriesUpdate);
+    props.onHide();
+  };
 
   const handleClassificationText = (bool) => {
     if (bool) {
@@ -306,7 +308,9 @@ function UserTransactionModal(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>
-          <Button onClick={deleteTransaction}  variant="danger">Delete</Button>
+          <Button onClick={deleteTransaction} variant="danger">
+            Delete
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

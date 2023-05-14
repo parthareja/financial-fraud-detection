@@ -1,0 +1,15 @@
+const loadGoogleScripts = (callback) => {
+  const existingScript = document.getElementById("gAuthScripts");
+  if (!existingScript) {
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.id = "gAuthScripts";
+    document.head.appendChild(script);
+    script.onload = () => {
+      if (callback) callback();
+    };
+  }
+  if (existingScript && callback) callback();
+};
+
+export default loadGoogleScripts;

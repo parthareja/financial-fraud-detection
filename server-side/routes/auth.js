@@ -17,10 +17,10 @@ router.post("/register", register);
 router.post("/login", login);
 router.get("/logout", verifyToken, logout);
 router.get("/test", verifyToken, verifyToken);
-router.get("/defaultLoginJWTGetUser", verifyToken, defaultLoginJWTGetUser);
+router.get("/defaultLoginJWTGetUser", defaultLoginJWTGetUser);
 router.post("/saveQuery", verifyToken, saveQuery);
 router.get("/userTransactions/:user_id", verifyToken, userTransactions);
-router.delete("/deleteUserTransaction/:transac_id",deleteUserTransaction);
+router.delete("/deleteUserTransaction/:transac_id", deleteUserTransaction);
 // router.get("/authTemp", verifyToken, authTemp)
 
 export default router;

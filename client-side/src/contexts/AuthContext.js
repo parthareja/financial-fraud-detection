@@ -21,7 +21,15 @@ export const AuthProvider = ({ children }) => {
   const login = async ({ username, password }) => {};
   const register = async ({}) => {};
 
-  const logout = async () => {};
+  const logout = async () => {
+    const res = await fetch("http://localhost:8080/auth/logout", {
+      credentials: "include",
+    });
+    setUser(false);
+    // console.log(user);
+    // localStorage.setItem("user", null)
+    navigate("/");
+  };
 
   const defaultLogin = async () => {
     if (user !== false) {
@@ -50,7 +58,7 @@ export const AuthProvider = ({ children }) => {
       );
 
       var authorized = temp.data;
-      // console.log(authorized);
+      console.log("authorized", authorized);
 
       // setUser("this doesn't work");
       // console.log(user);
@@ -66,8 +74,8 @@ export const AuthProvider = ({ children }) => {
         setUser(authorized);
         // console.log(user);
       }
-    } catch (er) {
-      return er;
+    } catch (err) {
+      return err;
     }
 
     // setLoading(false);
