@@ -42,6 +42,7 @@ function ContentDashboard(props) {
 
   const resetFields = () => {
     // datajson.current = {};
+    console.log("Fields reset")
 
     // resultData.current = "default";
 
@@ -85,6 +86,7 @@ function ContentDashboard(props) {
   }
 
   const handleSubmit = async (e) => {
+    console.log("transactino amount > ", transactionAmount)
     e.preventDefault()
     console.log("here1")
     if (validateForm()) {

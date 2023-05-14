@@ -5,8 +5,14 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 
+
+
+
 const ResultModal = (props) => {
   const [reRender, setReRender] = useState(false);
+
+
+
   // console.log(props.queryData);
   // var queryDataWithResult = useRef(props.queryData.current);
   // queryDataWithResult.current["ml_classification"] = props.result.current;
@@ -14,6 +20,17 @@ const ResultModal = (props) => {
   var queryDataWithResult = useRef("default");
   queryDataWithResult.current = props.queryData.current;
   queryDataWithResult.current["ml_classification"] = props.result.current;
+  queryDataWithResult.current["alias"] = null
+  const [errMessage, setErrMessage] = useState("")
+
+  const validateForm = () => {
+    var isValid = true
+    if (queryDataWithResult.current["alias"] == null) {
+      setErrMessage("Please enter an alias to save your transaction")
+      isValid = false
+    }
+    return isValid
+  }
 
   useEffect(() => {
     queryDataWithResult.current = props.queryData.current;
@@ -98,8 +115,7 @@ const ResultModal = (props) => {
 
   const handleSave = async () => {
     console.log("saving");
-    // console.log(props.queryData);
-    console.log(queryDataWithResult);
+    if (validateForm()) {
     await fetch("http://localhost:8080/auth/saveQuery", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -119,6 +135,7 @@ const ResultModal = (props) => {
     // console.log(queries);
 
     // clearForm();
+    }
   };
 
   return (
@@ -217,8 +234,10 @@ const ResultModal = (props) => {
                 placeholder="Enter an alias for this query (ex: JHN-09-02-03)"
                 onChange={(e) => {
                   queryDataWithResult.current["alias"] = e.target.value;
+                  console.log("changed alias data > ", queryDataWithResult.current["alias"])
                 }}
               />
+              <div className="text-red-500" >{errMessage}</div>
             </div>
           </div>
         </Modal.Body>
