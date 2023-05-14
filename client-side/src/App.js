@@ -69,10 +69,10 @@ function App() {
           <Routes>
             {/* <Route path="/" element={<App />} /> */}
             <Route path="/" element={<GLoginPage />} />
-            <Route path="/glogin" element={<GLoginPage />} />
+            {/* <Route path="/glogin" element={<GLoginPage />} /> */}
             <Route path="/dashboard" element={<DashBoard />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
+            <Route path="/login" element={<GLoginPage />} />
+            {/* <Route path="/signup" element={<SignUp />} /> */}
             <Route
               path="/testdev"
               element={<TestDev backendDataDev={bruh} />}

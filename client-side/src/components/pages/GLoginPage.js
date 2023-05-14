@@ -18,6 +18,9 @@ const GLoginPage = () => {
         style={{ backgroundColor: "rgb(230, 235, 229)" }}
         className="flex w-1/4 p-4"
       >
+        <div style={{ position: "absolute", top: "40%", alignSelf: "center" }}>
+          Financial-Fraud-Detection
+        </div>
         <div style={{ position: "absolute", top: "50%" }}>
           <Login />
         </div>
