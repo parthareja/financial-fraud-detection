@@ -59,7 +59,7 @@ export default function SignIn() {
     // console.log("VALUE OF NEW CONTEXT", user);
     if (user) {
       console.log("signin user value", user);
-      navigate("/dashboard");
+      // navigate("/dashboard");
     }
   }, [user]);
 
@@ -103,8 +103,8 @@ export default function SignIn() {
             setEmailError({ show: false, error: "" });
             setPasswordError({ show: false, error: "" });
             setUser(data);
-            console.log("YEH", user);
             navigate("/dashboard");
+            console.log("YEH", user);
           }
         });
       });

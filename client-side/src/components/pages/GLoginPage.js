@@ -1,13 +1,21 @@
 import React from "react";
+
 import Login from "../GOAuth/Login";
 import Logout from "../GOAuth/Logout";
 
+import Col from "react-bootstrap/Col";
+
 const GLoginPage = () => {
-  console.log("glogin page");
+  // console.log("glogin page");
   return (
-    <div>
-      <Login />
-      <Logout />
+    <div className="flex">
+      <Col>Wow</Col>
+      <Col>
+        Half
+        <Login />
+      </Col>
+
+      {/* <Logout /> */}
     </div>
   );
 };

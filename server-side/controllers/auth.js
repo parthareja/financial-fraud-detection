@@ -1,5 +1,8 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import jwt_decode from "jwt-decode";
+import { isJwtExpired } from "jwt-check-expiration";
+
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import Cookies from "js-cookie";
@@ -13,7 +16,7 @@ import { redisClient } from "../index.js";
 // const jwt = require("jsonwebtoken");
 // const User = require("../models/User.js");
 
-const maxAge = 60 * 30;
+const maxAge = 60 * 60;
 
 //handle errors
 const handleErrors = (err) => {
@@ -71,48 +74,73 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   console.log("login attempted");
-  try {
-    const { email, password } = req.body;
-    console.log(email, password);
-    const user = await User.findOne({ email: email });
-    if (!user) return res.status(400).json({ msg: "User does not exist." });
+  const jwt = req.body.jwt;
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: "Invalid password." });
-    const maxAge = 60 * 30;
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: maxAge,
-    });
-    delete user.password;
-    res.cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 });
+  if (isJwtExpired(jwt)) {
+    res.send(false);
+    console.log("JWT expired:", userjwt);
+  } else {
+    const decodedJWT = jwt_decode(jwt);
+    console.log("goodauth:", decodedJWT);
+    var user = {
+      _id: decodedJWT.sub,
+      name: decodedJWT.name,
+      email: decodedJWT.email,
+      picture: decodedJWT.picture,
+    };
+    res.cookie("jwt", jwt, { httpOnly: false, maxAge: maxAge * 1000 });
     res.status(200).json(user);
-  } catch (err) {
-    const errors = handleErrors(err);
-    console.log(errors);
-    res.status(500).json({ errors });
   }
+  // try {
+  //   const jwt = req.body.jwt;
+
+  //   if (isJwtExpired(userjwt)) {
+  //     res.send(false);
+  //     console.log("JWT expired:", userjwt);
+  //   } else {
+  //     console.log("goodauth:", decodedToken);
+  //     decoded_jwt = jwt_decode(jwt);
+  //     var user = {
+  //       _id: decoded_jwt.aud,
+  //       name: decoded_jwt.name,
+  //       email: decoded_jwt.email,
+  //       picture: decoded_jwt.picture,
+  //     };
+  //     res.cookie("jwt", jwt, { httpOnly: false, maxAge: maxAge * 1000 });
+  //     res.status(200).json(user);
+  //   }
+  // } catch (err) {
+  //   // const errors = handleErrors(err);
+  //   console.log(err);
+  //   res.status(500).json({ errors });
+  // }
 };
+// export const login = async (req, res) => {
+//   console.log("login attempted");
+//   try {
+//     const { email, password } = req.body;
+//     console.log(email, password);
+//     const user = await User.findOne({ email: email });
+//     if (!user) return res.status(400).json({ msg: "User does not exist." });
+
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch) return res.status(400).json({ msg: "Invalid password." });
+//     const maxAge = 60 * 30;
+//     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+//       expiresIn: maxAge,
+//     });
+//     delete user.password;
+//     res.cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 });
+//     res.status(200).json(user);
+//   } catch (err) {
+//     const errors = handleErrors(err);
+//     console.log(errors);
+//     res.status(500).json({ errors });
+//   }
+// };
 
 export const logout = async (req, res) => {
   var userjwt = 0;
-
-  // try {
-  //   let cookies = {};
-  //   const cookiesArray = req.headers.cookie.split(";");
-  //   cookiesArray.forEach((cookie) => {
-  //     const [key, value] = cookie.trim().split("=");
-  //     cookies[key] = value;
-  //   });
-  //   userjwt = cookies["jwt"];
-  //   const token_key = `bl_${userjwt}`;
-  //   await redisClient.set(token_key, userjwt);
-  //   redisClient.expireAt(token_key, maxAge);
-  //   res.send("logged out and token invalidated");
-  // } catch (err) {
-  //   console.log(err);
-  //   res.cookie("jwt", "", { maxAge: 1 }); //////////////////////////////////// BAD WAY TO DO
-  //   res.send(false);
-  // }
   let cookies = {};
   const cookiesArray = req.headers.cookie.split(";");
   cookiesArray.forEach((cookie) => {
@@ -161,17 +189,31 @@ export const defaultLoginJWTGetUser = async (req, res, next) => {
 
     const userjwt = cookies["jwt"];
     // console.log("JWT: ", userjwt);
+    const decodedJWT = jwt_decode(userjwt);
+    var user = {
+      _id: decodedJWT.sub,
+      name: decodedJWT.name,
+      email: decodedJWT.email,
+      picture: decodedJWT.picture,
+    };
 
-    const payload = getPayloadFromToken(userjwt);
-
-    const objectId = payload["_id"];
-    // console.log("User id: ", objectId);
-    // const userJson = await User.find({email:"test@test.com"});
-    const userJson = await User.findById({ _id: objectId });
+    const inDenyList = await redisClient.get(`bl_${userjwt}`);
+    // console.log(inDenyList);
+    if (inDenyList) {
+      res.send(false);
+      console.log("blacklisted");
+    } else {
+      if (isJwtExpired(userjwt)) {
+        res.send(false);
+        console.log("JWT expired:", decodedJWT);
+      } else {
+        console.log("goodauth defaultLogin:", decodedJWT);
+        res.json(user);
+      }
+    }
     // console.log("User by userId", userJson);
-    res.json(userJson);
-    next();
   } catch (err) {
+    console.log(err);
     res.send(false);
   }
 };
@@ -214,11 +256,10 @@ export const userTransactions = async (req, res) => {
 
 export const deleteUserTransaction = async (req, res) => {
   try {
-    const { transac_id } = req.params
-    await QueryData.deleteOne({ _id: transac_id })
-    res.send("Successfully deleted user transaction")
+    const { transac_id } = req.params;
+    await QueryData.deleteOne({ _id: transac_id });
+    res.send("Successfully deleted user transaction");
+  } catch (err) {
+    res.send({ msg: err });
   }
-  catch (err) {
-    res.send({ msg: err })
-  }
-} 
+};

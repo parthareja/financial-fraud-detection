@@ -14,27 +14,45 @@ import DashBoard from "./components/Dashboard/DashBoard";
 import TestDev from "./components/TestDev";
 import GLoginPage from "./components/pages/GLoginPage";
 
+import loadGoogleScripts from "./scripts/loadGoogleScripts";
+
 import { UserProvider } from "./contexts/UserContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { TestContext } from "./contexts/TestContext";
 
+const clientId =
+  "440183900348-krl09bm7pbvvkcpchvmmb7j88p0a5fh6.apps.googleusercontent.com";
+
 function App() {
+  // const loadGoogleScripts = (callback) => {
+  //   const existingScript = document.getElementById("gAuthScripts");
+  //   if (!existingScript) {
+  //     const script = document.createElement("script");
+  //     script.src = "https://accounts.google.com/gsi/client";
+  //     script.id = "gAuthScripts";
+  //     document.head.appendChild(script);
+  //     script.onload = () => {
+  //       if (callback) callback();
+  //     };
+  //   }
+  //   if (existingScript && callback) callback();
+  // };
+  // loadGoogleScripts(() => {
+  //   "called google scripts";
+  // });
   // const {user} = useUser();
   axios.defaults.withCredentials = true;
   const [user, setUser] = useState(false);
   const [auth, setAuth] = useState(false);
   const [backendData, setBackendData] = useState([{}]);
 
-  // const value = "My Context Value";
+  const handleCallBackResponse = () => {};
 
-  // const { user, setUser } = useUser;
-
-  // console.log("Outside useEffect", user);
-  // setUser(undefined);
   useEffect(() => {
-    function start() {
-      gapi.client.init({ clientId: clientId, scope: "" });
-    }
+    /* global google */
+    // loadGoogleScripts(() => {
+    //   "called google scripts";
+    // });
   }, []);
   const bruh = JSON.stringify(backendData);
   // console.log("App bruh backendData");
@@ -50,7 +68,7 @@ function App() {
         <AuthProvider>
           <Routes>
             {/* <Route path="/" element={<App />} /> */}
-            {/* <Route path="/" element={<SignUp />} /> */}
+            <Route path="/" element={<GLoginPage />} />
             <Route path="/glogin" element={<GLoginPage />} />
             <Route path="/dashboard" element={<DashBoard />} />
             <Route path="/signin" element={<SignIn />} />
