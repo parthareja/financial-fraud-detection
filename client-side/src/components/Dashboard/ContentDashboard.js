@@ -22,6 +22,7 @@ function ContentDashboard(props) {
 
   const queriesUpdate = props.queriesUpdate;
   const setQueriesUpdate = props.setQueriesUpdate;
+  const [errMessage, setErrMessage] = useState("");
 
   var datajson = useRef({});
 
@@ -32,11 +33,11 @@ function ContentDashboard(props) {
   var typeCashOut = useRef(true);
   var typeTransfer = useRef(false);
 
-  var oldBalanceOrig = useRef(0);
-  var newBalanceOrig = useRef(0);
-  var oldBalanceDest = useRef(0);
-  var newBalanceDest = useRef(0);
-  var transactionAmount = useRef(0);
+  var oldBalanceOrig = useRef(null);
+  var newBalanceOrig = useRef(null);
+  var oldBalanceDest = useRef(null);
+  var newBalanceDest = useRef(null);
+  var transactionAmount = useRef(null);
   var TransactionTime = useRef(1);
 
   const resetFields = () => {
@@ -49,11 +50,11 @@ function ContentDashboard(props) {
     typeCashOut.current = true;
     typeTransfer.current = false;
 
-    oldBalanceOrig.current = 0;
-    newBalanceOrig.current = 0;
-    oldBalanceDest.current = 0;
-    newBalanceDest.current = 0;
-    transactionAmount.current = 0;
+    oldBalanceOrig.current = null;
+    newBalanceOrig.current = null;
+    oldBalanceDest.current = null;
+    newBalanceDest.current = null;
+    transactionAmount.current = null;
     TransactionTime.current = 1;
     console.log("reset, amount > ", transactionAmount.current);
   };
@@ -67,11 +68,31 @@ function ContentDashboard(props) {
     var formData = document.getElementById("mainForm");
     formData.reset();
   };
+  const validateForm = ()=>{
+    var isValid = true 
+    if(oldBalanceOrig.current === null || newBalanceOrig.current === null || oldBalanceDest.current === null || newBalanceDest.current === null || transactionAmount.current === null){
+      setErrMessage("All form fields are mandatory")
+      isValid = false
+    }
+    else if(isNaN(oldBalanceOrig.current) || isNaN(newBalanceOrig.current) || isNaN(oldBalanceDest.current) || isNaN(newBalanceDest.current) || isNaN(transactionAmount.current)){
+
+      setErrMessage("All values must be numbers")
+      isValid = false}
+    // if (oldBalanceOrig.current != null) {
+    // console.log("oldBalOrg:", newBalanceOrig)}
+    // }
+    return isValid
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    console.log("here1")
+    if (validateForm()) {
+      console.log("here2VALID")
     // console.log("on submit entry amount value > ", transactionAmount.current);
-    datajson.current = {
+      setErrMessage("")
+      e.preventDefault();
+      datajson.current = {
       user_id: user._id,
       amount: transactionAmount.current,
       oldbalanceOrg: oldBalanceOrig.current,
@@ -111,11 +132,11 @@ function ContentDashboard(props) {
       oldBalanceOrig.current,
       oldBalanceDest.current,
       oldBalanceOrig.current -
-        transactionAmount.current -
-        newBalanceOrig.current,
+      transactionAmount.current -
+      newBalanceOrig.current,
       oldBalanceDest.current +
-        transactionAmount.current -
-        newBalanceDest.current,
+      transactionAmount.current -
+      newBalanceDest.current,
       typeCashOut.current,
       typeTransfer.current,
     ];
@@ -144,7 +165,7 @@ function ContentDashboard(props) {
     resetFields();
     setQueriesUpdate(!queriesUpdate);
 
-    clearForm();
+    clearForm();}
   };
 
   // (e) =>{(e)=>{if(e.currentTarget.value= 'transfer'){setTypeCashOut(0);setTypeTransfer(1)}}}
@@ -347,6 +368,8 @@ function ContentDashboard(props) {
                             </div>
                         </Row>
                     </div> */}
+          
+          <div className="text-red-500">{errMessage}</div>
           <Button variant="primary" type="submit">
             Submit
           </Button>
