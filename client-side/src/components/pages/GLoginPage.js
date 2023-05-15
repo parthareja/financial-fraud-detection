@@ -10,20 +10,20 @@ import { Container } from "@mui/material";
 const GLoginPage = () => {
   // console.log("glogin page");
   return (
-    <div style={{ height: "100vh" }} className="flex">
-      <div className="flex w-3/4">
+    <div style={{ height: "100vh" }} className="flex w-screen">
+      <div className="flex w-4/5">
         <img style={{ objectFit: "cover" }} src="../../../img/greenLogin.jpg" />
       </div>
       <div
         style={{ backgroundColor: "rgb(230, 235, 229)" }}
-        className="flex w-1/4 p-4"
+        className="w-1/5 px-6 py-72 align-middle align-center"
       >
-        <div style={{ position: "absolute", top: "40%", alignSelf: "center" }}>
-          Financial-Fraud-Detection
-        </div>
-        <div style={{ position: "absolute", top: "50%" }}>
+        <span className="align-center">
+          <h5 className="flex p-4 ">Financial-Fraud-Detection</h5>
+        </span>
+        <span className="align-center">
           <Login />
-        </div>
+        </span>
       </div>
 
       {/* <Logout /> */}

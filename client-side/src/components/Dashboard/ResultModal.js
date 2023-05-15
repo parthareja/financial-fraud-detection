@@ -5,13 +5,8 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 
-
-
-
 const ResultModal = (props) => {
   const [reRender, setReRender] = useState(false);
-
-
 
   // console.log(props.queryData);
   // var queryDataWithResult = useRef(props.queryData.current);
@@ -20,24 +15,24 @@ const ResultModal = (props) => {
   var queryDataWithResult = useRef("default");
   queryDataWithResult.current = props.queryData.current;
   queryDataWithResult.current["ml_classification"] = props.result.current;
-  queryDataWithResult.current["alias"] = null
-  const [errMessage, setErrMessage] = useState("")
+  queryDataWithResult.current["alias"] = null;
+  const [errMessage, setErrMessage] = useState("");
 
   const validateForm = () => {
-    var isValid = true
+    var isValid = true;
     if (queryDataWithResult.current["alias"] == null) {
-      setErrMessage("Please enter an alias to save your transaction")
-      isValid = false
+      setErrMessage("Please enter an alias to save your transaction");
+      isValid = false;
     }
-    return isValid
-  }
+    return isValid;
+  };
 
   useEffect(() => {
     queryDataWithResult.current = props.queryData.current;
     queryDataWithResult.current["ml_classification"] = props.result.current;
     console.log(queryDataWithResult.current);
     setReRender(!reRender);
-    console.log("reRendered");
+    console.log("reRendered modal");
   }, [props.queryData]);
 
   const [resultText, setResultText] = useState("default");
@@ -112,29 +107,34 @@ const ResultModal = (props) => {
   // };
 
   // Save Query logic
+  const handleClose = () => {
+    props.onHide();
+    props.setRefreshForm(!props.refreshForm);
+  };
 
   const handleSave = async () => {
     console.log("saving");
     if (validateForm()) {
-    await fetch("http://localhost:8080/auth/saveQuery", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(queryDataWithResult.current),
-      credentials: "include",
-    })
-      .then((data) => {
-        console.log(data);
-        // console.log(props);
-        props.onHide();
-        props.setQueriesUpdate(!props.queriesUpdate);
+      await fetch("http://localhost:8080/auth/saveQuery", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(queryDataWithResult.current),
+        credentials: "include",
       })
-      .catch((err) => console.log(err.message));
+        .then((data) => {
+          console.log(data);
+          // console.log(props);
+          props.onHide();
+          props.setQueriesUpdate(!props.queriesUpdate);
+          props.setRefreshForm(!props.refreshForm);
+        })
+        .catch((err) => console.log(err.message));
 
-    // POST_ml_query(ml_datajson_array);
+      // POST_ml_query(ml_datajson_array);
 
-    // console.log(queries);
+      // console.log(queries);
 
-    // clearForm();
+      // clearForm();
     }
   };
 
@@ -234,15 +234,18 @@ const ResultModal = (props) => {
                 placeholder="Enter an alias for this query (ex: JHN-09-02-03)"
                 onChange={(e) => {
                   queryDataWithResult.current["alias"] = e.target.value;
-                  console.log("changed alias data > ", queryDataWithResult.current["alias"])
+                  console.log(
+                    "changed alias data > ",
+                    queryDataWithResult.current["alias"]
+                  );
                 }}
               />
-              <div className="text-red-500" >{errMessage}</div>
+              <div className="text-red-500">{errMessage}</div>
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={props.onHide}>
+          <Button variant="danger" onClick={handleClose}>
             Close
           </Button>
           <Button variant="success" onClick={handleSave}>

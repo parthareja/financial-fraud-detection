@@ -1,5 +1,5 @@
 import axios from "axios";
-import { React, useContext, useRef } from "react";
+import { React, useContext, useEffect, useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -16,13 +16,18 @@ import { TestContext } from "../../contexts/TestContext";
 function ContentDashboard(props) {
   // const [typeCashOut, setTypeCashOut] = useState(true);
   // const [typeTransfer, setTypeTransfer] = useState(false);
+  const [refreshForm, setRefreshForm] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
+  const [errMessage, setErrMessage] = useState("");
   // const [modalData, setModalData] = useState("default");
   // const [datajson, setDataJson] = useState({});
 
+  // useEffect(() => {
+  //   console.log("FORM REFRESHED");
+  // }, [refreshForm]);
+
   const queriesUpdate = props.queriesUpdate;
   const setQueriesUpdate = props.setQueriesUpdate;
-  const [errMessage, setErrMessage] = useState("");
 
   var datajson = useRef({});
 
@@ -42,7 +47,7 @@ function ContentDashboard(props) {
 
   const resetFields = () => {
     // datajson.current = {};
-    console.log("Fields reset")
+    console.log("Fields reset");
 
     // resultData.current = "default";
 
@@ -69,105 +74,117 @@ function ContentDashboard(props) {
     var formData = document.getElementById("mainForm");
     formData.reset();
   };
-  const validateForm = ()=>{
-    var isValid = true 
-    if(oldBalanceOrig.current === null || newBalanceOrig.current === null || oldBalanceDest.current === null || newBalanceDest.current === null || transactionAmount.current === null){
-      setErrMessage("All form fields are mandatory")
-      isValid = false
+  const validateForm = () => {
+    var isValid = true;
+    if (
+      oldBalanceOrig.current === null ||
+      newBalanceOrig.current === null ||
+      oldBalanceDest.current === null ||
+      newBalanceDest.current === null ||
+      transactionAmount.current === null
+    ) {
+      setErrMessage("All form fields are mandatory");
+      isValid = false;
+    } else if (
+      isNaN(oldBalanceOrig.current) ||
+      isNaN(newBalanceOrig.current) ||
+      isNaN(oldBalanceDest.current) ||
+      isNaN(newBalanceDest.current) ||
+      isNaN(transactionAmount.current)
+    ) {
+      setErrMessage("All values must be numbers");
+      isValid = false;
     }
-    else if(isNaN(oldBalanceOrig.current) || isNaN(newBalanceOrig.current) || isNaN(oldBalanceDest.current) || isNaN(newBalanceDest.current) || isNaN(transactionAmount.current)){
-
-      setErrMessage("All values must be numbers")
-      isValid = false}
     // if (oldBalanceOrig.current != null) {
     // console.log("oldBalOrg:", newBalanceOrig)}
     // }
-    return isValid
-  }
+    return isValid;
+  };
 
   const handleSubmit = async (e) => {
-    console.log("transactino amount > ", transactionAmount)
-    e.preventDefault()
-    console.log("here1")
+    console.log("transactino amount > ", transactionAmount);
+    e.preventDefault();
+    console.log("here1");
     if (validateForm()) {
-      console.log("here2VALID")
-    // console.log("on submit entry amount value > ", transactionAmount.current);
-      setErrMessage("")
+      console.log("here2VALID");
+      // console.log("on submit entry amount value > ", transactionAmount.current);
+      setErrMessage("");
       e.preventDefault();
       datajson.current = {
-      user_id: user._id,
-      amount: transactionAmount.current,
-      oldbalanceOrg: oldBalanceOrig.current,
-      newbalanceOrg: newBalanceOrig.current,
-      origBalance_inacc:
+        user_id: user._id,
+        amount: transactionAmount.current,
+        oldbalanceOrg: oldBalanceOrig.current,
+        newbalanceOrg: newBalanceOrig.current,
+        origBalance_inacc:
+          oldBalanceOrig.current -
+          transactionAmount.current -
+          newBalanceOrig.current,
+        oldbalanceDest: oldBalanceDest.current,
+        newbalanceDest: newBalanceDest.current,
+        destBalance_inacc:
+          oldBalanceDest.current +
+          transactionAmount.current -
+          newBalanceDest.current,
+        type_CASH_OUT: typeCashOut.current,
+        type_TRANSFER: typeTransfer.current,
+        step: TransactionTime.current,
+      };
+
+      // setDataJson({
+      //   user_id: user._id,
+      //   amount: transactionAmount,
+      //   oldbalanceOrg: oldBalanceOrig,
+      //   newbalanceOrg: newBalanceOrig,
+      //   origBalance_inacc: oldBalanceOrig - transactionAmount - newBalanceOrig,
+      //   oldbalanceDest: oldBalanceDest,
+      //   newbalanceDest: newBalanceDest,
+      //   destBalance_inacc: oldBalanceDest + transactionAmount - newBalanceDest,
+      //   type_CASH_OUT: typeCashOut,
+      //   type_TRANSFER: typeTransfer,
+      //   step: TransactionTime,
+      //   alias: transactionAlias,
+      // });
+      const ml_datajson_array = [
+        TransactionTime.current,
+        transactionAmount.current,
+        oldBalanceOrig.current,
+        oldBalanceDest.current,
         oldBalanceOrig.current -
-        transactionAmount.current -
-        newBalanceOrig.current,
-      oldbalanceDest: oldBalanceDest.current,
-      newbalanceDest: newBalanceDest.current,
-      destBalance_inacc:
+          transactionAmount.current -
+          newBalanceOrig.current,
         oldBalanceDest.current +
-        transactionAmount.current -
-        newBalanceDest.current,
-      type_CASH_OUT: typeCashOut.current,
-      type_TRANSFER: typeTransfer.current,
-      step: TransactionTime.current,
-    };
+          transactionAmount.current -
+          newBalanceDest.current,
+        typeCashOut.current,
+        typeTransfer.current,
+      ];
 
-    // setDataJson({
-    //   user_id: user._id,
-    //   amount: transactionAmount,
-    //   oldbalanceOrg: oldBalanceOrig,
-    //   newbalanceOrg: newBalanceOrig,
-    //   origBalance_inacc: oldBalanceOrig - transactionAmount - newBalanceOrig,
-    //   oldbalanceDest: oldBalanceDest,
-    //   newbalanceDest: newBalanceDest,
-    //   destBalance_inacc: oldBalanceDest + transactionAmount - newBalanceDest,
-    //   type_CASH_OUT: typeCashOut,
-    //   type_TRANSFER: typeTransfer,
-    //   step: TransactionTime,
-    //   alias: transactionAlias,
-    // });
-    const ml_datajson_array = [
-      TransactionTime.current,
-      transactionAmount.current,
-      oldBalanceOrig.current,
-      oldBalanceDest.current,
-      oldBalanceOrig.current -
-      transactionAmount.current -
-      newBalanceOrig.current,
-      oldBalanceDest.current +
-      transactionAmount.current -
-      newBalanceDest.current,
-      typeCashOut.current,
-      typeTransfer.current,
-    ];
+      // console.log("datajson collection, ", datajson);
+      // console.log("ml query data collection, ", ml_datajson_array); // console.log(datajson);
+      const POST_ml_query = async (record) => {
+        const data = [record];
+        console.log("ml query data in POST", data);
+        const res = await fetch("http://127.0.0.1:5000/ml_query", {
+          method: "POST",
+          body: JSON.stringify({ data: data }),
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            modalData.current = res[0];
+            // console.log("modalData ,", res[0]);
+            setShowResultModal(true);
+          });
+      };
 
-    // console.log("datajson collection, ", datajson);
-    // console.log("ml query data collection, ", ml_datajson_array); // console.log(datajson);
-    const POST_ml_query = async (record) => {
-      const data = [record];
-      console.log("ml query data in POST", data);
-      const res = await fetch("http://127.0.0.1:5000/ml_query", {
-        method: "POST",
-        body: JSON.stringify({ data: data }),
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          modalData.current = res[0];
-          // console.log("modalData ,", res[0]);
-          setShowResultModal(true);
-        });
-    };
+      POST_ml_query(ml_datajson_array);
 
-    POST_ml_query(ml_datajson_array);
+      resetFields();
+      setQueriesUpdate(!queriesUpdate);
 
-    resetFields();
-    setQueriesUpdate(!queriesUpdate);
-
-    clearForm();}
+      clearForm();
+    }
   };
 
   // (e) =>{(e)=>{if(e.currentTarget.value= 'transfer'){setTypeCashOut(0);setTypeTransfer(1)}}}
@@ -189,6 +206,8 @@ function ContentDashboard(props) {
       <div className="w-1/2 h-full ">
         {showResultModal && (
           <ResultModal
+            refreshForm={refreshForm}
+            setRefreshForm={setRefreshForm}
             queriesUpdate={queriesUpdate}
             setQueriesUpdate={setQueriesUpdate}
             queryData={datajson}
@@ -198,6 +217,9 @@ function ContentDashboard(props) {
             showResultState={{ showResultModal, setShowResultModal }}
           />
         )}
+        <div className="flex container justify-center self-center my-11">
+          <h2>Enter Transaction details</h2>
+        </div>
         <Form onSubmit={handleSubmit} id="mainForm">
           <Row className="mb-3">
             <Form.Group as={Col} controlId="formOldBalanceOrig">
@@ -207,7 +229,7 @@ function ContentDashboard(props) {
                 <Form.Control
                   placeholder="Enter amount "
                   autoComplete="off"
-                  onChange={(e) => {
+                  onKeyUp={(e) => {
                     oldBalanceOrig.current = parseInt(e.target.value);
                   }}
                 />
@@ -221,7 +243,7 @@ function ContentDashboard(props) {
                 <Form.Control
                   placeholder="Enter amount "
                   autoComplete="off"
-                  onChange={(e) => {
+                  onKeyUp={(e) => {
                     newBalanceOrig.current = parseInt(e.target.value);
                   }}
                 />
@@ -236,7 +258,7 @@ function ContentDashboard(props) {
                 <Form.Control
                   placeholder="Enter amount "
                   autoComplete="off"
-                  onChange={(e) => {
+                  onKeyUp={(e) => {
                     oldBalanceDest.current = parseInt(e.target.value);
                   }}
                 />
@@ -250,7 +272,7 @@ function ContentDashboard(props) {
                 <Form.Control
                   placeholder="Enter amount "
                   autoComplete="off"
-                  onChange={(e) => {
+                  onKeyUp={(e) => {
                     newBalanceDest.current = parseInt(e.target.value);
                     // console.log(
                     //   "newBalanceDest.current > ",
@@ -269,8 +291,9 @@ function ContentDashboard(props) {
                 <Form.Control
                   placeholder="Enter amount "
                   autoComplete="off"
-                  onChange={(e) => {
+                  onKeyUp={(e) => {
                     transactionAmount.current = parseInt(e.target.value);
+                    console.log(transactionAmount.current);
                   }}
                 />
               </InputGroup>
@@ -370,7 +393,7 @@ function ContentDashboard(props) {
                             </div>
                         </Row>
                     </div> */}
-          
+
           <div className="text-red-500">{errMessage}</div>
           <Button variant="primary" type="submit">
             Submit
